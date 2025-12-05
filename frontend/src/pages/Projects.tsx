@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import ProjectOverview from '../components/ProjectSubPages/ProjectOverview';
@@ -40,9 +40,15 @@ const Projects: React.FC = () => {
     setSidebarOpen(newState);
     localStorage.setItem('sidebarOpen', JSON.stringify(newState));
   };
+  
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Reset to list view when component mounts
+  useEffect(() => {
+    setSelectedProject(null);
+  }, []);
 
   const projects = [
     {
@@ -282,83 +288,87 @@ const Projects: React.FC = () => {
                 </div>
               </div>
 
-              {/* Tabs */}
-              <div className="tabs">
-                <button 
-                  className={`tab ${activeTab === 'overview' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('overview')}
-                >
-                  <Briefcase size={18} />
-                  Overview
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'tasks' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('tasks')}
-                >
-                  <CheckSquare size={18} />
-                  Tasks
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'timesheets' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('timesheets')}
-                >
-                  <Clock size={18} />
-                  Timesheets
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'team' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('team')}
-                >
-                  <Users size={18} />
-                  Team
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'milestones' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('milestones')}
-                >
-                  <Target size={18} />
-                  Milestones
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'client' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('client')}
-                >
-                  <Eye size={18} />
-                  Client Portal
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'files' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('files')}
-                >
-                  <FolderOpen size={18} />
-                  Files
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'automation' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('automation')}
-                >
-                  <Bell size={18} />
-                  Automation
-                </button>
-                <button 
-                  className={`tab ${activeTab === 'reports' ? 'tab-active' : ''}`}
-                  onClick={() => setActiveTab('reports')}
-                >
-                  <TrendingUp size={18} />
-                  Reports
-                </button>
+              {/* Enhanced Tabs with Icons */}
+              <div className="project-tabs-container">
+                <div className="tabs">
+                  <button 
+                    className={`tab ${activeTab === 'overview' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('overview')}
+                  >
+                    <Briefcase size={18} />
+                    <span>Overview</span>
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'tasks' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('tasks')}
+                  >
+                    <CheckSquare size={18} />
+                    <span>Tasks</span>
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'timesheets' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('timesheets')}
+                  >
+                    <Clock size={18} />
+                    <span>Timesheets</span>
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'team' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('team')}
+                  >
+                    <Users size={18} />
+                    <span>Team</span>
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'milestones' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('milestones')}
+                  >
+                    <Target size={18} />
+                    <span>Milestones</span>
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'client' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('client')}
+                  >
+                    <Eye size={18} />
+                    <span>Client Portal</span>
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'files' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('files')}
+                  >
+                    <FolderOpen size={18} />
+                    <span>Files</span>
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'automation' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('automation')}
+                  >
+                    <Bell size={18} />
+                    <span>Automation</span>
+                  </button>
+                  <button 
+                    className={`tab ${activeTab === 'reports' ? 'tab-active' : ''}`}
+                    onClick={() => setActiveTab('reports')}
+                  >
+                    <TrendingUp size={18} />
+                    <span>Reports</span>
+                  </button>
+                </div>
               </div>
 
-              {/* Render Active Tab Content */}
-              {activeTab === 'overview' && <ProjectOverview project={currentProject} />}
-              {activeTab === 'tasks' && <TasksManagement projectId={selectedProject} />}
-              {activeTab === 'timesheets' && <Timesheets projectId={selectedProject} />}
-              {activeTab === 'team' && <TeamCollaboration projectId={selectedProject} />}
-              {activeTab === 'milestones' && <Milestones projectId={selectedProject} />}
-              {activeTab === 'client' && <ClientPortal projectId={selectedProject} />}
-              {activeTab === 'files' && <FilesManagement projectId={selectedProject} />}
-              {activeTab === 'automation' && <Automation projectId={selectedProject} />}
-              {activeTab === 'reports' && <Reports projectId={selectedProject} />}
+              {/* Render Active Tab Content with Smooth Transitions */}
+              <div className="tab-content-wrapper">
+                {activeTab === 'overview' && <ProjectOverview project={currentProject} />}
+                {activeTab === 'tasks' && <TasksManagement projectId={selectedProject} />}
+                {activeTab === 'timesheets' && <Timesheets projectId={selectedProject} />}
+                {activeTab === 'team' && <TeamCollaboration projectId={selectedProject} />}
+                {activeTab === 'milestones' && <Milestones projectId={selectedProject} />}
+                {activeTab === 'client' && <ClientPortal projectId={selectedProject} />}
+                {activeTab === 'files' && <FilesManagement projectId={selectedProject} />}
+                {activeTab === 'automation' && <Automation projectId={selectedProject} />}
+                {activeTab === 'reports' && <Reports projectId={selectedProject} />}
+              </div>
             </>
           )}
         </div>

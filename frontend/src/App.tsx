@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Suspense, lazy, useState, useEffect } from 'react';
+import { Suspense, lazy } from 'react';
 import './styles/Dashboard.css';
 
 // Lazy load components
@@ -40,13 +40,6 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const authStatus = localStorage.getItem('isAuthenticated') === 'true';
-    setIsAuthenticated(authStatus);
-  }, []);
-
   return (
     <Router>
       <Suspense fallback={<Loading />}>
@@ -56,16 +49,9 @@ function App() {
           
           {/* Projects Module */}
           <Route path="/projects" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
-          <Route path="/projects/tasks" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
-          <Route path="/projects/timesheets" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
-          <Route path="/projects/overview" element={<ProtectedRoute><Projects /></ProtectedRoute>} />
           
           {/* HRM Module */}
           <Route path="/hrm" element={<ProtectedRoute><HRM /></ProtectedRoute>} />
-          <Route path="/hrm/attendance" element={<ProtectedRoute><HRM /></ProtectedRoute>} />
-          <Route path="/hrm/payroll" element={<ProtectedRoute><HRM /></ProtectedRoute>} />
-          <Route path="/hrm/payslips" element={<ProtectedRoute><HRM /></ProtectedRoute>} />
-          <Route path="/hrm/documents" element={<ProtectedRoute><HRM /></ProtectedRoute>} />
           
           {/* Sales Module */}
           <Route path="/sales" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
@@ -76,11 +62,12 @@ function App() {
           
           {/* Accounts Module */}
           <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
-          <Route path="/accounts/income" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
-          <Route path="/accounts/expenses" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
-          <Route path="/accounts/bank-accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
-          <Route path="/accounts/ledger" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/banking" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/income-expense" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/receivables" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/payables" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/reports" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/settings" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           
           {/* Recruitment Module */}
           <Route path="/recruitment" element={<ProtectedRoute><Recruitment /></ProtectedRoute>} />

@@ -175,64 +175,111 @@ const HRM: React.FC = () => {
             </div>
           </div>
 
-          {/* Main Tabs */}
-          <div className="hrm-tabs">
-            <button 
-              className={`hrm-tab ${activeTab === 'employees' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('employees'); setActiveSubTab('all'); }}
-            >
-              <Users size={18} />
-              Employee Management
-            </button>
-            <button 
-              className={`hrm-tab ${activeTab === 'attendance' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('attendance'); setActiveSubTab('today'); }}
-            >
-              <Clock size={18} />
-              Attendance
-            </button>
-            <button 
-              className={`hrm-tab ${activeTab === 'leaves' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('leaves'); setActiveSubTab('requests'); }}
-            >
-              <Calendar size={18} />
-              Leave Management
-            </button>
-            <button 
-              className={`hrm-tab ${activeTab === 'payroll' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('payroll'); setActiveSubTab('salary'); }}
-            >
-              <DollarSign size={18} />
-              Payroll
-            </button>
-            <button 
-              className={`hrm-tab ${activeTab === 'performance' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('performance'); setActiveSubTab('reviews'); }}
-            >
-              <TrendingUp size={18} />
-              Performance
-            </button>
-            <button 
-              className={`hrm-tab ${activeTab === 'letters' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('letters'); setActiveSubTab('generate'); }}
-            >
-              <FileText size={18} />
-              HR Letters
-            </button>
-            <button 
-              className={`hrm-tab ${activeTab === 'travel' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('travel'); setActiveSubTab('requests'); }}
-            >
-              <Plane size={18} />
-              Travel & Expense
-            </button>
-            <button 
-              className={`hrm-tab ${activeTab === 'automation' ? 'active' : ''}`}
-              onClick={() => { setActiveTab('automation'); setActiveSubTab('notifications'); }}
-            >
-              <Bell size={18} />
-              Automation
-            </button>
+          {/* Main Tabs - Interactive Cards Layout */}
+          <div className="hrm-tabs-container">
+            {/* First Row - 4 Cards */}
+            <div className="hrm-tabs-grid">
+              <button 
+                className={`hrm-tab-card ${activeTab === 'employees' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('employees'); setActiveSubTab('all'); }}
+              >
+                <div className="hrm-tab-card-icon">
+                  <Users size={24} />
+                </div>
+                <div className="hrm-tab-card-content">
+                  <h3>Employee Management</h3>
+                  <p>Manage team members</p>
+                </div>
+              </button>
+              <button 
+                className={`hrm-tab-card ${activeTab === 'attendance' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('attendance'); setActiveSubTab('today'); }}
+              >
+                <div className="hrm-tab-card-icon">
+                  <Clock size={24} />
+                </div>
+                <div className="hrm-tab-card-content">
+                  <h3>Attendance</h3>
+                  <p>Track attendance</p>
+                </div>
+              </button>
+              <button 
+                className={`hrm-tab-card ${activeTab === 'leaves' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('leaves'); setActiveSubTab('requests'); }}
+              >
+                <div className="hrm-tab-card-icon">
+                  <Calendar size={24} />
+                </div>
+                <div className="hrm-tab-card-content">
+                  <h3>Leave Management</h3>
+                  <p>Manage leave requests</p>
+                </div>
+              </button>
+              <button 
+                className={`hrm-tab-card ${activeTab === 'payroll' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('payroll'); setActiveSubTab('salary'); }}
+              >
+                <div className="hrm-tab-card-icon">
+                  <DollarSign size={24} />
+                </div>
+                <div className="hrm-tab-card-content">
+                  <h3>Payroll</h3>
+                  <p>Salary & payments</p>
+                </div>
+              </button>
+            </div>
+            
+            {/* Second Row - 4 Cards */}
+            <div className="hrm-tabs-grid">
+              <button 
+                className={`hrm-tab-card ${activeTab === 'performance' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('performance'); setActiveSubTab('reviews'); }}
+              >
+                <div className="hrm-tab-card-icon">
+                  <TrendingUp size={24} />
+                </div>
+                <div className="hrm-tab-card-content">
+                  <h3>Performance</h3>
+                  <p>Reviews & analytics</p>
+                </div>
+              </button>
+              <button 
+                className={`hrm-tab-card ${activeTab === 'letters' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('letters'); setActiveSubTab('generate'); }}
+              >
+                <div className="hrm-tab-card-icon">
+                  <FileText size={24} />
+                </div>
+                <div className="hrm-tab-card-content">
+                  <h3>HR Letters</h3>
+                  <p>Generate documents</p>
+                </div>
+              </button>
+              <button 
+                className={`hrm-tab-card ${activeTab === 'travel' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('travel'); setActiveSubTab('requests'); }}
+              >
+                <div className="hrm-tab-card-icon">
+                  <Plane size={24} />
+                </div>
+                <div className="hrm-tab-card-content">
+                  <h3>Travel & Expense</h3>
+                  <p>Manage travel requests</p>
+                </div>
+              </button>
+              <button 
+                className={`hrm-tab-card ${activeTab === 'automation' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('automation'); setActiveSubTab('notifications'); }}
+              >
+                <div className="hrm-tab-card-icon">
+                  <Bell size={24} />
+                </div>
+                <div className="hrm-tab-card-content">
+                  <h3>Automation</h3>
+                  <p>Workflows & alerts</p>
+                </div>
+              </button>
+            </div>
           </div>
 
           {/* ===== EMPLOYEE MANAGEMENT TAB ===== */}

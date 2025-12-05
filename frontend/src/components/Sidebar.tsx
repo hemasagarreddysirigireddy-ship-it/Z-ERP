@@ -98,23 +98,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       label: 'Projects', 
       path: '/projects', 
       badge: null, 
-      submenu: [
-        { icon: CheckSquare, label: 'Tasks', path: '/projects/tasks' },
-        { icon: Clock, label: 'Timesheets', path: '/projects/timesheets' },
-        { icon: BarChart3, label: 'Project Overview', path: '/projects/overview' }
-      ]
+      submenu: null
     },
     { 
       icon: UserCheck, 
       label: 'HRM', 
       path: '/hrm', 
       badge: null, 
-      submenu: [
-        { icon: Calendar, label: 'Attendance', path: '/hrm/attendance' },
-        { icon: DollarSign, label: 'Salary & Payroll', path: '/hrm/payroll' },
-        { icon: Receipt, label: 'Payslips', path: '/hrm/payslips' },
-        { icon: FileText, label: 'Staff Documents', path: '/hrm/documents' }
-      ]
+      submenu: null
     },
     { 
       icon: TrendingUp, 
@@ -134,11 +125,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       path: '/accounts', 
       badge: null, 
       submenu: [
-        { icon: TrendingUp, label: 'Income', path: '/accounts/income' },
-        { icon: Receipt, label: 'Expenses', path: '/accounts/expenses' },
-        { icon: Building2, label: 'Bank Accounts', path: '/accounts/bank-accounts' },
-        { icon: BookOpen, label: 'Ledger', path: '/accounts/ledger' },
-        { icon: BarChart3, label: 'Reports', path: '/accounts/reports' }
+        { icon: Building2, label: 'Banking', path: '/accounts/banking' },
+        { icon: TrendingUp, label: 'Income & Expense', path: '/accounts/income-expense' },
+        { icon: Users, label: 'Receivables', path: '/accounts/receivables' },
+        { icon: FileText, label: 'Payables', path: '/accounts/payables' },
+        { icon: BarChart3, label: 'Reports', path: '/accounts/reports' },
+        { icon: Settings, label: 'Settings', path: '/accounts/settings' }
       ]
     },
     { 
