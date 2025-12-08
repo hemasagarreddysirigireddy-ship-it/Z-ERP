@@ -5,7 +5,16 @@ import { Users, TrendingUp, Phone, Mail, MessageSquare, Calendar, DollarSign, Pl
 import '../styles/Dashboard.css';
 
 const Customers = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem('sidebarOpen');
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  const handleSidebarToggle = () => {
+    const newState = !sidebarOpen;
+    setSidebarOpen(newState);
+    localStorage.setItem('sidebarOpen', JSON.stringify(newState));
+  };
   const [activeTab, setActiveTab] = useState('leads');
 
   // Leads Data
@@ -182,9 +191,9 @@ const Customers = () => {
 
   return (
     <div className="dashboard-container">
-      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
-      <div className="main-content">
-        <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onToggle={handleSidebarToggle} />
+      <div className={`main-content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+        <Header onMenuClick={handleSidebarToggle} />
         <div className="page-content">
           <div className="page-header">
             <div>

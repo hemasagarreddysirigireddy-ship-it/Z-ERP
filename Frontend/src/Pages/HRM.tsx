@@ -8,7 +8,16 @@ import {
 } from 'lucide-react';
 
 const HRM: React.FC = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem('sidebarOpen');
+    return saved ? JSON.parse(saved) : false;
+  });
+
+  const handleSidebarToggle = () => {
+    const newState = !sidebarOpen;
+    setSidebarOpen(newState);
+    localStorage.setItem('sidebarOpen', JSON.stringify(newState));
+  };
   const [activeTab, setActiveTab] = useState('attendance');
 
   const attendanceData = [
@@ -49,10 +58,10 @@ const HRM: React.FC = () => {
 
   return (
     <div className="dashboard-layout">
-      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onToggle={handleSidebarToggle} />
       
-      <div className="main-content">
-        <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <div className={`main-content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+        <Header onMenuClick={handleSidebarToggle} />
         
         <div className="page-container">
           <div className="page-header">

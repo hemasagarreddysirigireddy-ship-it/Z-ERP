@@ -1,257 +1,1110 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
-import StatCard from '../components/StatCard';
-import AnalyticsChart from '../components/AnalyticsChart';
-import RecentTransactions from '../components/RecentTransactions';
-import ProjectStatus from '../components/ProjectStatus';
-import ActivityTimeline from '../components/ActivityTimeline';
-import TaskSummary from '../components/TaskSummary';
-import SalesPipeline from '../components/SalesPipeline';
-import DateFilter from '../components/DateFilter';
-import AlertsPanel from '../components/AlertsPanel';
 import { 
-  FileText, 
-  Users, 
-  Contact, 
-  Zap, 
-  DollarSign, 
-  CheckCircle,
-  Calendar,
-  Bell,
-  MessageSquare,
+  FileText,
+  UserCheck,
+  Bot,
+  TrendingUp,
+  CheckCircle2,
+  ListTodo,
   FolderKanban,
+  Bell,
+  Ticket,
+  Volume2,
+  ChevronLeft,
+  ChevronRight,
+  Search,
   BarChart3,
-  Receipt,
-  Upload
+  RefreshCw
 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(() => {
+    const saved = localStorage.getItem('sidebarOpen');
+    return saved ? JSON.parse(saved) : false;
+  });
 
-  const statsData = [
+  const handleSidebarToggle = () => {
+    const newState = !sidebarOpen;
+    setSidebarOpen(newState);
+    localStorage.setItem('sidebarOpen', JSON.stringify(newState));
+  };
+  const [activeTab, setActiveTab] = useState('tasks');
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [entriesPerPage, setEntriesPerPage] = useState(25);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [calendarView, setCalendarView] = useState<'month' | 'week' | 'day'>('month');
+  const [sortConfig, setSortConfig] = useState<{ key: string; direction: 'asc' | 'desc' } | null>(null);
+  const [expandedCalendar, setExpandedCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  // Top Stats Cards
+  const statsCards = [
     {
-      title: 'Templates',
+      title: 'TEMPLATES',
       value: '3',
       subtitle: '3 Approved',
-      trend: { value: '+12.4%', isPositive: true, label: 'vs last month' },
       icon: FileText,
-      iconColor: 'icon-yellow',
-      forecast: '5 by end of month'
+      color: 'stat-yellow',
+      iconBg: 'bg-yellow'
     },
     {
-      title: 'Total Leads',
+      title: 'LEADS',
       value: '136',
       subtitle: '0 this month',
-      trend: { value: '+18.2%', isPositive: true, label: 'vs last month' },
-      icon: Users,
-      iconColor: 'icon-blue',
-      forecast: '180 projected',
-      onClick: () => console.log('Navigate to Leads')
+      icon: TrendingUp,
+      color: 'stat-blue',
+      iconBg: 'bg-blue'
     },
     {
-      title: 'Contacts',
+      title: 'CONTACTS',
       value: '56',
       subtitle: '2 this month',
-      trend: { value: '+8.4%', isPositive: true, label: 'vs last month' },
-      icon: Contact,
-      iconColor: 'icon-green',
-      onClick: () => console.log('Navigate to Contacts')
+      icon: UserCheck,
+      color: 'stat-green',
+      iconBg: 'bg-green'
     },
     {
-      title: 'Active Clients',
-      value: '156',
-      subtitle: 'Engaged users',
-      trend: { value: '+23.1%', isPositive: true, label: 'vs last month' },
-      icon: Zap,
-      iconColor: 'icon-purple'
-    },
-    {
-      title: 'Total Revenue',
-      value: '₹24.5k',
-      subtitle: 'This month',
-      trend: { value: '+15.3%', isPositive: true, label: 'vs last month' },
-      icon: DollarSign,
-      iconColor: 'icon-teal',
-      forecast: '₹32k projected',
-      onClick: () => console.log('Navigate to Revenue')
-    },
-    {
-      title: 'Completion Rate',
-      value: '87.5%',
-      subtitle: 'On-time delivery',
-      trend: { value: '+4.2%', isPositive: true, label: 'vs last month' },
-      icon: CheckCircle,
-      iconColor: 'icon-indigo',
-      alert: 'Target: 90%'
+      title: 'BOTS',
+      value: '1',
+      subtitle: '0 Messages sent',
+      icon: Bot,
+      color: 'stat-gray',
+      iconBg: 'bg-gray'
     }
   ];
 
-  const recentActivities = [
-    { id: 1, action: 'New lead added', user: 'John Doe', time: '2 minutes ago', type: 'lead' },
-    { id: 2, action: 'Invoice #1234 sent', user: 'Sarah Smith', time: '15 minutes ago', type: 'invoice' },
-    { id: 3, action: 'Task completed', user: 'Mike Johnson', time: '1 hour ago', type: 'task' },
-    { id: 4, action: 'New client onboarded', user: 'Emily Davis', time: '2 hours ago', type: 'client' },
-    { id: 5, action: 'Meeting scheduled', user: 'Admin User', time: '3 hours ago', type: 'appointment' }
+  // Progress Bars Data
+  const progressData = [
+    {
+      title: 'Converted Leads',
+      current: 0,
+      total: 0,
+      percentage: 0,
+      icon: TrendingUp,
+      color: 'progress-blue'
+    },
+    {
+      title: 'Projects in Progress',
+      current: 1,
+      total: 1,
+      percentage: 100,
+      icon: FolderKanban,
+      color: 'progress-blue'
+    },
+    {
+      title: 'Tasks Not Finished',
+      current: 1,
+      total: 1,
+      percentage: 100,
+      icon: CheckCircle2,
+      color: 'progress-dark'
+    }
   ];
 
-  const upcomingTasks = [
-    { id: 1, title: 'Review project proposal', priority: 'high', dueDate: 'Today, 2:00 PM' },
-    { id: 2, title: 'Client meeting preparation', priority: 'high', dueDate: 'Today, 4:30 PM' },
-    { id: 3, title: 'Update website content', priority: 'medium', dueDate: 'Tomorrow, 10:00 AM' },
-    { id: 4, title: 'Send monthly reports', priority: 'medium', dueDate: 'Dec 5, 9:00 AM' },
-    { id: 5, title: 'Team sync meeting', priority: 'low', dueDate: 'Dec 6, 11:00 AM' }
+  // Tasks Data
+  const tasksData = [
+    {
+      id: 1488,
+      name: 'Frond end UI Design',
+      project: '#203 - Web RTC - Zedunix',
+      status: 'In Progress',
+      startDate: '02-12-2025',
+      tags: [],
+      priority: 'High'
+    }
   ];
 
-  const quickActions = [
-    { icon: FileText, label: 'Create Invoice', color: 'action-blue' },
-    { icon: Users, label: 'Add Lead', color: 'action-green' },
-    { icon: Contact, label: 'New Contact', color: 'action-purple' },
-    { icon: CheckCircle, label: 'Add Task', color: 'action-orange' },
-    { icon: FolderKanban, label: 'Create Project', color: 'action-teal' },
-    { icon: BarChart3, label: 'Generate Report', color: 'action-indigo' },
-    { icon: Receipt, label: 'Add Expense', color: 'action-pink' },
-    { icon: Upload, label: 'Upload Docs', color: 'action-cyan' }
+  // Projects Data
+  const projectsData = [
+    {
+      id: 1,
+      name: 'Web RTC',
+      startDate: '02-12-2025',
+      deadline: '',
+      status: 'In Progress'
+    }
   ];
+
+  // Reminders Data - Empty as shown in image
+  const remindersData: Array<{
+    id: number;
+    relatedTo: string;
+    description: string;
+    date: string;
+  }> = [];
+
+  // Tickets Data
+  const ticketsData = [
+    {
+      id: 2,
+      subject: 'need help on abc',
+      tags: '',
+      status: 'Answered',
+      priority: 'Medium',
+      lastReply: '24-07-2025 3:53 PM'
+    }
+  ];
+
+  // Announcements Data
+  const announcementsData = [
+    {
+      id: 1,
+      subject: 'Mandatory Wearing of ID Cards Inside the Office',
+      view: 'View',
+      date: '09-05-2025 1:15 PM'
+    },
+    {
+      id: 2,
+      subject: 'Weekly ZOLLID Team Meeting – Building Attitude, Skill & Knowledge',
+      date: '11-04-2025 10:15 PM'
+    }
+  ];
+
+  // Calendar Events
+  const calendarEvents = [
+    {
+      id: 1,
+      title: 'Friend end UI Design...',
+      color: 'event-blue',
+      date: 2
+    },
+    {
+      id: 2,
+      title: 'Web RTC',
+      color: 'event-pink',
+      date: 2
+    }
+  ];
+
+  // Generate calendar days
+  const generateCalendar = () => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+    const days = [];
+
+    // Previous month days
+    for (let i = firstDay - 1; i >= 0; i--) {
+      days.push({
+        day: daysInPrevMonth - i,
+        isCurrentMonth: false,
+        isToday: false
+      });
+    }
+
+    // Current month days
+    const today = new Date();
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push({
+        day: i,
+        isCurrentMonth: true,
+        isToday: year === today.getFullYear() && month === today.getMonth() && i === today.getDate()
+      });
+    }
+
+    // Next month days
+    const remainingDays = 42 - days.length;
+    for (let i = 1; i <= remainingDays; i++) {
+      days.push({
+        day: i,
+        isCurrentMonth: false,
+        isToday: false
+      });
+    }
+
+    return days;
+  };
+
+  const monthName = currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+  // Filtering and sorting logic
+  const getFilteredData = () => {
+    let data: Record<string, unknown>[] = [];
+    
+    switch (activeTab) {
+      case 'tasks':
+        data = tasksData;
+        break;
+      case 'projects':
+        data = projectsData;
+        break;
+      case 'reminders':
+        data = remindersData;
+        break;
+      case 'tickets':
+        data = ticketsData;
+        break;
+      case 'announcements':
+        data = announcementsData;
+        break;
+      default:
+        data = [];
+    }
+
+    // Apply search filter
+    if (searchQuery) {
+      data = data.filter(item => 
+        Object.values(item).some(val => 
+          String(val).toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+
+    // Apply sorting
+    if (sortConfig) {
+      data.sort((a, b) => {
+        const aVal = a[sortConfig.key as keyof typeof a] as string | number;
+        const bVal = b[sortConfig.key as keyof typeof b] as string | number;
+        if (aVal < bVal) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aVal > bVal) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    return data;
+  };
+
+  // Pagination logic
+  const filteredData = getFilteredData();
+  const totalPages = Math.ceil(filteredData.length / entriesPerPage);
+  const startIndex = (currentPage - 1) * entriesPerPage;
+  const endIndex = startIndex + entriesPerPage;
+  const paginatedData = filteredData.slice(startIndex, endIndex);
+
+  // Calendar navigation
+  const goToToday = () => {
+    setCurrentMonth(new Date());
+    setSelectedDate(new Date());
+  };
+
+  const previousMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1));
+  };
+
+  const nextMonth = () => {
+    setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
+  };
+
+  // Reset to page 1 when tab changes
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+    setSearchQuery('');
+    setSortConfig(null);
+  };
+
+  // Handle sort
+  const handleSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
 
   return (
     <div className="dashboard-layout">
-      <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+      <Sidebar isOpen={sidebarOpen} onToggle={handleSidebarToggle} />
       
-      <div className="main-content">
-        <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <div className={`main-content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+        <Header onMenuClick={handleSidebarToggle} />
         
-        <div className="dashboard-container">
-          <div className="dashboard-header">
-            <div>
-              <h1 className="dashboard-title">Dashboard Overview</h1>
-              <p className="dashboard-subtitle">Welcome back! Here's what's happening with your business today.</p>
-            </div>
-            <DateFilter onChange={(period) => console.log('Period changed:', period)} />
-          </div>
-
-          {/* Quick Actions */}
-          <div className="quick-actions">
-            {quickActions.map((action, index) => {
-              const Icon = action.icon;
+        <div className="dashboard-container-new">
+          {/* Top Stats Cards */}
+          <div className="stats-cards-grid">
+            {statsCards.map((card, index) => {
+              const Icon = card.icon;
               return (
-                <button key={index} className={`quick-action-btn ${action.color}`}>
-                  <Icon size={20} />
-                  <span>{action.label}</span>
-                </button>
+                <div key={index} className={`stat-card ${card.color}`}>
+                  <div className="stat-card-header">
+                    <span className="stat-title">{card.title}</span>
+                    <div className={`stat-icon ${card.iconBg}`}>
+                      <Icon size={24} />
+                    </div>
+                  </div>
+                  <div className="stat-card-body">
+                    <h2 className="stat-value">{card.value}</h2>
+                    <p className="stat-subtitle">{card.subtitle}</p>
+                  </div>
+                </div>
               );
             })}
           </div>
 
-          {/* Stats Grid */}
-          <div className="stats-grid">
-            {statsData.map((stat, index) => (
-              <StatCard
-                key={index}
-                title={stat.title}
-                value={stat.value}
-                subtitle={stat.subtitle}
-                trend={stat.trend}
-                icon={stat.icon}
-                iconColor={stat.iconColor}
-                onClick={stat.onClick}
-                forecast={stat.forecast}
-                alert={stat.alert}
-              />
-            ))}
+          {/* Progress Bars Section */}
+          <div className="progress-section">
+            {progressData.map((progress, index) => {
+              const Icon = progress.icon;
+              return (
+                <div key={index} className={`progress-card ${progress.color}`}>
+                  <div className="progress-header">
+                    <Icon size={18} />
+                    <span>{progress.title}</span>
+                    <span className="progress-stats">{progress.current} / {progress.total}</span>
+                  </div>
+                  <div className="progress-bar-wrapper">
+                    <div 
+                      className="progress-bar-fill-new" 
+                      style={{ width: `${progress.percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
-          {/* Bottom Section with Enhanced Panels */}
-          <div className="dashboard-bottom">
-            {/* Alerts Panel */}
-            <AlertsPanel />
-
-            {/* Task Summary */}
-            <TaskSummary />
-
-            {/* Sales Pipeline */}
-            <SalesPipeline />
-
-            {/* Analytics Chart */}
-            <AnalyticsChart 
-              title="Revenue Analytics"
-              data={[
-                { label: 'Mon', value: 25000, color: 'linear-gradient(135deg, #00d97e 0%, #00a860 100%)' },
-                { label: 'Tue', value: 32000, color: 'linear-gradient(135deg, #00d97e 0%, #00a860 100%)' },
-                { label: 'Wed', value: 28000, color: 'linear-gradient(135deg, #00d97e 0%, #00a860 100%)' },
-                { label: 'Thu', value: 45000, color: 'linear-gradient(135deg, #00d97e 0%, #00a860 100%)' },
-                { label: 'Fri', value: 38000, color: 'linear-gradient(135deg, #00d97e 0%, #00a860 100%)' },
-                { label: 'Sat', value: 42000, color: 'linear-gradient(135deg, #00d97e 0%, #00a860 100%)' },
-                { label: 'Sun', value: 35000, color: 'linear-gradient(135deg, #00d97e 0%, #00a860 100%)' }
-              ]}
-            />
-
-            {/* Activity Timeline */}
-            <ActivityTimeline />
-
-            {/* Project Status */}
-            <ProjectStatus />
-
-            {/* Recent Transactions */}
-            <RecentTransactions />
-
-            <div className="activity-panel">
-              <div className="panel-header">
-                <div className="panel-header-left">
-                  <Bell size={20} />
-                  <h2 className="panel-title">Recent Activities</h2>
-                </div>
-                <button className="view-all-btn">View All</button>
+          {/* Main Content Grid */}
+          <div className="main-grid-layout">
+            {/* Left Section - Tasks & Calendar */}
+            <div className="left-section">
+              {/* Tabs Navigation */}
+              <div className="tabs-navigation">
+                <button 
+                  className={`tab-btn ${activeTab === 'tasks' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('tasks')}
+                >
+                  <ListTodo size={18} />
+                  <span>My Tasks</span>
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'projects' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('projects')}
+                >
+                  <FolderKanban size={18} />
+                  <span>My Projects</span>
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'reminders' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('reminders')}
+                >
+                  <Bell size={18} />
+                  <span>My Reminders</span>
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'tickets' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('tickets')}
+                >
+                  <Ticket size={18} />
+                  <span>Tickets</span>
+                </button>
+                <button 
+                  className={`tab-btn ${activeTab === 'announcements' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('announcements')}
+                >
+                  <Volume2 size={18} />
+                  <span>Announcements</span>
+                </button>
               </div>
-              <div className="activity-list">
-                {recentActivities.map(activity => (
-                  <div key={activity.id} className="activity-item">
-                    <div className={`activity-icon ${activity.type}`}>
-                      {activity.type === 'lead' && <Users size={16} />}
-                      {activity.type === 'invoice' && <FileText size={16} />}
-                      {activity.type === 'task' && <CheckCircle size={16} />}
-                      {activity.type === 'client' && <Contact size={16} />}
-                      {activity.type === 'appointment' && <Calendar size={16} />}
-                    </div>
-                    <div className="activity-content">
-                      <div className="activity-action">{activity.action}</div>
-                      <div className="activity-meta">
-                        <span className="activity-user">{activity.user}</span>
-                        <span className="activity-time">{activity.time}</span>
-                      </div>
+
+              {/* View All Link */}
+              <div className="view-all-link">
+                <a href="#view-all">View All</a>
+              </div>
+
+              {/* Table Controls */}
+              <div className="table-controls">
+                <select 
+                  className="entries-select"
+                  value={entriesPerPage}
+                  onChange={(e) => setEntriesPerPage(Number(e.target.value))}
+                >
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+                <button className="control-btn">
+                  Export
+                </button>
+                <button className="control-btn">
+                  <RefreshCw size={16} />
+                </button>
+              </div>
+
+              {/* Dynamic Tab Content */}
+              {activeTab === 'tasks' && (
+                <div className="tasks-table-wrapper">
+                  <div className="table-search-bar">
+                    <Search size={18} />
+                    <input 
+                      type="text" 
+                      placeholder="Search tasks.." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <table className="tasks-table">
+                    <thead>
+                      <tr>
+                        <th onClick={() => handleSort('id')} style={{ cursor: 'pointer' }}>
+                          # {sortConfig?.key === 'id' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
+                          Name {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('status')} style={{ cursor: 'pointer' }}>
+                          Status {sortConfig?.key === 'status' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('startDate')} style={{ cursor: 'pointer' }}>
+                          Start Date {sortConfig?.key === 'startDate' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th>Tags</th>
+                        <th onClick={() => handleSort('priority')} style={{ cursor: 'pointer' }}>
+                          Priority {sortConfig?.key === 'priority' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.length > 0 ? (
+                        paginatedData.map((item) => {
+                          const task = item as typeof tasksData[0];
+                          return (
+                          <tr key={task.id}>
+                            <td>{task.id}</td>
+                            <td>
+                              <div className="task-name-cell">
+                                <a href={`#task-${task.id}`} className="task-link">{task.name}</a>
+                                <span className="task-project">{task.project}</span>
+                              </div>
+                            </td>
+                            <td>
+                              <span className="status-badge status-progress">
+                                {task.status} <ChevronRight size={14} />
+                              </span>
+                            </td>
+                            <td>{task.startDate}</td>
+                            <td>-</td>
+                            <td>
+                              <span className="priority-badge priority-high">
+                                {task.priority} <ChevronRight size={14} />
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={6} className="no-entries">
+                            No tasks found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                  <div className="table-footer">
+                    <span>Showing {startIndex + 1} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} entries</span>
+                    <div className="pagination">
+                      <button 
+                        className="page-btn" 
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </button>
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        const pageNum = i + 1;
+                        return (
+                          <button 
+                            key={pageNum}
+                            className={`page-btn ${currentPage === pageNum ? 'active' : ''}`}
+                            onClick={() => setCurrentPage(pageNum)}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                      <button 
+                        className="page-btn" 
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </button>
                     </div>
                   </div>
-                ))}
+                </div>
+              )}
+
+              {activeTab === 'projects' && (
+                <div className="tasks-table-wrapper">
+                  <div className="table-search-bar">
+                    <Search size={18} />
+                    <input 
+                      type="text" 
+                      placeholder="Search projects.." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <table className="tasks-table">
+                    <thead>
+                      <tr>
+                        <th onClick={() => handleSort('name')} style={{ cursor: 'pointer' }}>
+                          Project Name {sortConfig?.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('startDate')} style={{ cursor: 'pointer' }}>
+                          Start Date {sortConfig?.key === 'startDate' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th>Deadline</th>
+                        <th style={{ width: '50px' }}></th>
+                        <th onClick={() => handleSort('status')} style={{ cursor: 'pointer' }}>
+                          Status {sortConfig?.key === 'status' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.length > 0 ? (
+                        paginatedData.map((item) => {
+                          const project = item as typeof projectsData[0];
+                          return (
+                          <tr key={project.id}>
+                            <td>
+                              <a href={`#project-${project.id}`} className="task-link">{project.name}</a>
+                            </td>
+                            <td>{project.startDate}</td>
+                            <td>{project.deadline || '-'}</td>
+                            <td>
+                              <button className="icon-btn">
+                                <ChevronRight size={18} />
+                              </button>
+                            </td>
+                            <td>
+                              <span className="status-badge status-progress">
+                                {project.status}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={5} className="no-entries">
+                            No projects found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                  <div className="table-footer">
+                    <span>Showing {startIndex + 1} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} entries</span>
+                    <div className="pagination">
+                      <button 
+                        className="page-btn" 
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </button>
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        const pageNum = i + 1;
+                        return (
+                          <button 
+                            key={pageNum}
+                            className={`page-btn ${currentPage === pageNum ? 'active' : ''}`}
+                            onClick={() => setCurrentPage(pageNum)}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                      <button 
+                        className="page-btn" 
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'reminders' && (
+                <div className="tasks-table-wrapper">
+                  <div className="table-search-bar">
+                    <Search size={18} />
+                    <input 
+                      type="text" 
+                      placeholder="Search reminders.." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <table className="tasks-table">
+                    <thead>
+                      <tr>
+                        <th onClick={() => handleSort('relatedTo')} style={{ cursor: 'pointer' }}>
+                          Related to {sortConfig?.key === 'relatedTo' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('description')} style={{ cursor: 'pointer' }}>
+                          Description {sortConfig?.key === 'description' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('date')} style={{ cursor: 'pointer' }}>
+                          Date {sortConfig?.key === 'date' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th style={{ width: '50px' }}></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.length === 0 ? (
+                        <tr>
+                          <td colSpan={4} className="no-entries">
+                            No entries found
+                          </td>
+                        </tr>
+                      ) : (
+                        paginatedData.map((item) => {
+                          const reminder = item as typeof remindersData[0];
+                          return (
+                          <tr key={reminder.id}>
+                            <td>{reminder.relatedTo}</td>
+                            <td>{reminder.description}</td>
+                            <td>{reminder.date}</td>
+                            <td>
+                              <button className="icon-btn">
+                                <ChevronRight size={18} />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {activeTab === 'tickets' && (
+                <div className="tasks-table-wrapper">
+                  <div className="table-search-bar">
+                    <Search size={18} />
+                    <input 
+                      type="text" 
+                      placeholder="Search tickets.." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <table className="tasks-table">
+                    <thead>
+                      <tr>
+                        <th onClick={() => handleSort('id')} style={{ cursor: 'pointer' }}>
+                          # {sortConfig?.key === 'id' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('subject')} style={{ cursor: 'pointer' }}>
+                          Subject {sortConfig?.key === 'subject' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th>Tags</th>
+                        <th onClick={() => handleSort('status')} style={{ cursor: 'pointer' }}>
+                          Status {sortConfig?.key === 'status' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('priority')} style={{ cursor: 'pointer' }}>
+                          Priority {sortConfig?.key === 'priority' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('lastReply')} style={{ cursor: 'pointer' }}>
+                          Last Reply {sortConfig?.key === 'lastReply' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.length > 0 ? (
+                        paginatedData.map((item) => {
+                          const ticket = item as typeof ticketsData[0];
+                          return (
+                          <tr key={ticket.id}>
+                            <td>{ticket.id}</td>
+                            <td>
+                              <a href={`#ticket-${ticket.id}`} className="task-link">{ticket.subject}</a>
+                            </td>
+                            <td>{ticket.tags || '-'}</td>
+                            <td>
+                              <span className="status-badge status-answered">
+                                {ticket.status}
+                              </span>
+                            </td>
+                            <td>{ticket.priority}</td>
+                            <td>{ticket.lastReply}</td>
+                          </tr>
+                        );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={6} className="no-entries">
+                            No tickets found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                  <div className="table-footer">
+                    <span>Showing {startIndex + 1} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} entries</span>
+                    <div className="pagination">
+                      <button 
+                        className="page-btn" 
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </button>
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        const pageNum = i + 1;
+                        return (
+                          <button 
+                            key={pageNum}
+                            className={`page-btn ${currentPage === pageNum ? 'active' : ''}`}
+                            onClick={() => setCurrentPage(pageNum)}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                      <button 
+                        className="page-btn" 
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'announcements' && (
+                <div className="tasks-table-wrapper">
+                  <div className="table-search-bar">
+                    <Search size={18} />
+                    <input 
+                      type="text" 
+                      placeholder="Search announcements.." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                  </div>
+                  <table className="tasks-table announcements-table">
+                    <thead>
+                      <tr>
+                        <th onClick={() => handleSort('subject')} style={{ cursor: 'pointer' }}>
+                          Subject {sortConfig?.key === 'subject' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th onClick={() => handleSort('date')} style={{ cursor: 'pointer' }}>
+                          Date {sortConfig?.key === 'date' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                        </th>
+                        <th style={{ width: '50px' }}></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedData.length > 0 ? (
+                        paginatedData.map((item) => {
+                          const announcement = item as typeof announcementsData[0];
+                          return (
+                          <tr key={announcement.id}>
+                            <td>
+                              <div className="announcement-cell">
+                                <a href={`#announcement-${announcement.id}`} className="task-link">
+                                  {announcement.subject}
+                                </a>
+                                {announcement.view && (
+                                  <a href={`#view-${announcement.id}`} className="view-link">
+                                    {announcement.view}
+                                  </a>
+                                )}
+                              </div>
+                            </td>
+                            <td>{announcement.date}</td>
+                            <td>
+                              <button className="icon-btn">
+                                <ChevronRight size={18} />
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={3} className="no-entries">
+                            No announcements found
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                  <div className="table-footer">
+                    <span>Showing {startIndex + 1} to {Math.min(endIndex, filteredData.length)} of {filteredData.length} entries</span>
+                    <div className="pagination">
+                      <button 
+                        className="page-btn" 
+                        onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </button>
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        const pageNum = i + 1;
+                        return (
+                          <button 
+                            key={pageNum}
+                            className={`page-btn ${currentPage === pageNum ? 'active' : ''}`}
+                            onClick={() => setCurrentPage(pageNum)}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      })}
+                      <button 
+                        className="page-btn" 
+                        onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                        disabled={currentPage === totalPages}
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Calendar View */}
+              <div className="calendar-section">
+                <div className="calendar-header">
+                  <div className="calendar-controls">
+                    <button 
+                      className="calendar-nav-btn"
+                      onClick={previousMonth}
+                      title="Previous Month"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button 
+                      className="calendar-nav-btn"
+                      onClick={nextMonth}
+                      title="Next Month"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                    <button 
+                      className="today-btn"
+                      onClick={goToToday}
+                      title="Go to Today"
+                    >
+                      Today
+                    </button>
+                    <button 
+                      className="expand-btn"
+                      onClick={() => setExpandedCalendar(!expandedCalendar)}
+                      title={expandedCalendar ? "Collapse Calendar" : "Expand Calendar"}
+                    >
+                      {expandedCalendar ? 'Collapse' : 'Expand'}
+                    </button>
+                  </div>
+                  <h3 className="calendar-month">{monthName}</h3>
+                  <div className="calendar-view-options">
+                    <button 
+                      className={`view-option-btn ${calendarView === 'month' ? 'active' : ''}`}
+                      onClick={() => setCalendarView('month')}
+                    >
+                      Month
+                    </button>
+                    <button 
+                      className={`view-option-btn ${calendarView === 'week' ? 'active' : ''}`}
+                      onClick={() => setCalendarView('week')}
+                    >
+                      Week
+                    </button>
+                    <button 
+                      className={`view-option-btn ${calendarView === 'day' ? 'active' : ''}`}
+                      onClick={() => setCalendarView('day')}
+                    >
+                      Day
+                    </button>
+                  </div>
+                </div>
+
+                <div className={`calendar-grid ${expandedCalendar ? 'expanded' : ''}`}>
+                  <div className="calendar-weekdays">
+                    {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                      <div key={day} className="weekday">{day}</div>
+                    ))}
+                  </div>
+                  <div className="calendar-days">
+                    {generateCalendar().map((dayInfo, index) => (
+                      <div 
+                        key={index} 
+                        className={`calendar-day ${!dayInfo.isCurrentMonth ? 'other-month' : ''} ${dayInfo.isToday ? 'today' : ''} ${selectedDate && dayInfo.day === selectedDate.getDate() && dayInfo.isCurrentMonth ? 'selected' : ''}`}
+                        onClick={() => dayInfo.isCurrentMonth && setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), dayInfo.day))}
+                        role="button"
+                        tabIndex={0}
+                      >
+                        <span className="day-number">{dayInfo.day}</span>
+                        {dayInfo.day === 2 && dayInfo.isCurrentMonth && (
+                          <div className="day-events">
+                            {calendarEvents.map((event) => (
+                              <div 
+                                key={event.id} 
+                                className={`event-pill ${event.color}`}
+                                title={event.title}
+                              >
+                                {event.title}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="tasks-panel">
-              <div className="panel-header">
-                <div className="panel-header-left">
-                  <MessageSquare size={20} />
-                  <h2 className="panel-title">Upcoming Tasks</h2>
+            {/* Right Section - Sidebar Panels */}
+            <div className="right-section">
+              {/* My To Do Items */}
+              <div className="sidebar-panel">
+                <div className="panel-header">
+                  <div className="panel-title">
+                    <CheckCircle2 size={18} />
+                    <span>My To Do Items</span>
+                  </div>
+                  <div className="panel-actions">
+                    <button className="panel-action-btn">View All</button>
+                    <button className="panel-action-btn">New To Do</button>
+                  </div>
                 </div>
-                <button className="view-all-btn">View All</button>
+
+                {/* Latest to do's */}
+                <div className="todo-section">
+                  <h4 className="todo-section-title">
+                    ⚠️ Latest to do's
+                  </h4>
+                  <p className="todo-empty">No todos found</p>
+                </div>
+
+                {/* Latest finished to do's */}
+                <div className="todo-section">
+                  <h4 className="todo-section-title">
+                    ✓ Latest finished to do's
+                  </h4>
+                  <p className="todo-empty">No finished todos found</p>
+                </div>
               </div>
-              <div className="tasks-list">
-                {upcomingTasks.map(task => (
-                  <div key={task.id} className="task-item">
-                    <div className="task-checkbox">
-                      <input type="checkbox" id={`task-${task.id}`} />
+
+              {/* Leads Overview */}
+              <div className="sidebar-panel">
+                <div className="panel-header">
+                  <div className="panel-title">
+                    <BarChart3 size={18} />
+                    <span>Leads Overview</span>
+                  </div>
+                </div>
+
+                <div className="leads-chart">
+                  <div className="chart-legend">
+                    <div className="legend-item">
+                      <span className="legend-color bg-cyan"></span>
+                      <span>New Enquiry</span>
                     </div>
-                    <div className="task-content">
-                      <label htmlFor={`task-${task.id}`} className="task-title">
-                        {task.title}
-                      </label>
-                      <div className="task-meta">
-                        <span className={`task-priority priority-${task.priority}`}>
-                          {task.priority}
-                        </span>
-                        <span className="task-due">{task.dueDate}</span>
+                    <div className="legend-item">
+                      <span className="legend-color bg-green"></span>
+                      <span>Follow up</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color bg-red"></span>
+                      <span>Not interested</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color bg-lime"></span>
+                      <span>Customer</span>
+                    </div>
+                    <div className="legend-item">
+                      <span className="legend-color bg-orange"></span>
+                      <span>Lost Leads</span>
+                    </div>
+                  </div>
+                  
+                  {/* Placeholder for chart - would integrate a chart library */}
+                  <div className="chart-placeholder">
+                    <div className="donut-chart">
+                      <svg viewBox="0 0 100 100" className="donut-svg">
+                        <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3b82f6" strokeWidth="20" />
+                      </svg>
+                      <div className="chart-center-text">
+                        <span className="chart-value">136</span>
+                        <span className="chart-label">Total Leads</span>
                       </div>
                     </div>
                   </div>
-                ))}
+                </div>
+              </div>
+
+              {/* Latest Project Activity */}
+              <div className="sidebar-panel">
+                <div className="panel-header">
+                  <div className="panel-title">
+                    <FolderKanban size={18} />
+                    <span>Latest Project Activity</span>
+                  </div>
+                </div>
+
+                <div className="activity-timeline">
+                  <div className="activity-item-timeline">
+                    <div className="activity-marker"></div>
+                    <div className="activity-content-timeline">
+                      <div className="activity-header-timeline">
+                        <strong>2 DAYS AGO</strong>
+                      </div>
+                      <p className="activity-text">
+                        <strong>Finas Zollid</strong> - Added new task assignee
+                      </p>
+                      <p className="activity-meta">Project Name: <a href="#">Web RTC</a></p>
+                      <p className="activity-meta">Friend end UI Design - C Janardhan</p>
+                    </div>
+                  </div>
+                  
+                  <div className="activity-item-timeline">
+                    <div className="activity-marker"></div>
+                    <div className="activity-content-timeline">
+                      <div className="activity-header-timeline">
+                        <strong>2 DAYS AGO</strong>
+                      </div>
+                      <p className="activity-text">
+                        <strong>Finas Zollid</strong> - Added new task assignee
+                      </p>
+                      <p className="activity-meta">Project Name: <a href="#">Web RTC</a></p>
+                      <p className="activity-meta">Friend end UI Design - Finas Zollid</p>
+                    </div>
+                  </div>
+
+                  <div className="activity-item-timeline">
+                    <div className="activity-marker"></div>
+                    <div className="activity-content-timeline">
+                      <div className="activity-header-timeline">
+                        <strong>2 DAYS AGO</strong>
+                      </div>
+                      <p className="activity-text">
+                        <strong>Finas Zollid</strong> - Created the project
+                      </p>
+                      <p className="activity-meta">Project Name: <a href="#">Web RTC</a></p>
+                    </div>
+                  </div>
+
+                  <div className="activity-item-timeline">
+                    <div className="activity-marker"></div>
+                    <div className="activity-content-timeline">
+                      <div className="activity-header-timeline">
+                        <strong>2 DAYS AGO</strong>
+                      </div>
+                      <p className="activity-text">
+                        <strong>Finas Zollid</strong> - Added new team member
+                      </p>
+                      <p className="activity-meta">Project Name: <a href="#">Web RTC</a></p>
+                      <p className="activity-meta">Swaroop Pattar</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

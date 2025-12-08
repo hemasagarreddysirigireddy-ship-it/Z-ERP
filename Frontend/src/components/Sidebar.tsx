@@ -51,13 +51,44 @@ interface SubMenuItem {
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
   const location = useLocation();
-  const [expandedMenus, setExpandedMenus] = useState<{[key: string]: boolean}>({});
+  const [expandedMenus, setExpandedMenus] = useState<{[key: string]: boolean}>(() => {
+    const saved = localStorage.getItem('expandedMenus');
+    return saved ? JSON.parse(saved) : {};
+  });
 
   const toggleMenu = (menuKey: string) => {
-    setExpandedMenus(prev => ({
-      ...prev,
-      [menuKey]: !prev[menuKey]
-    }));
+    setExpandedMenus(prev => {
+      // Get all parent menu keys (main folders)
+      const parentKeys = menuItems
+        .filter(item => item.submenu)
+        .map(item => item.label);
+      
+      // If clicking a parent menu, close all other parents
+      if (parentKeys.includes(menuKey)) {
+        const newState: {[key: string]: boolean} = {};
+        
+        // Keep only sub-menu states (non-parent keys)
+        Object.keys(prev).forEach(key => {
+          if (!parentKeys.includes(key)) {
+            newState[key] = prev[key];
+          }
+        });
+        
+        // Toggle the clicked parent
+        newState[menuKey] = !prev[menuKey];
+        
+        localStorage.setItem('expandedMenus', JSON.stringify(newState));
+        return newState;
+      } else {
+        // For sub-menus, just toggle normally
+        const newState = {
+          ...prev,
+          [menuKey]: !prev[menuKey]
+        };
+        localStorage.setItem('expandedMenus', JSON.stringify(newState));
+        return newState;
+      }
+    });
   };
 
   const menuItems: MenuItem[] = [
@@ -186,7 +217,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       {isOpen && (
         <div 
           className="sidebar-overlay"
-          onClick={onToggle}
         />
       )}
 
@@ -210,12 +240,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
             const hasSubmenu = item.submenu && item.submenu.length > 0;
             const isExpanded = expandedMenus[item.label];
             
+            // Check if any submenu item is active
+            const isSubmenuActive = hasSubmenu && item.submenu!.some(
+              (subItem) => location.pathname === subItem.path
+            );
+            
             return (
               <div key={item.path}>
                 {hasSubmenu ? (
                   <>
                     <button
-                      className={`nav-item ${isActive ? 'nav-item-active' : ''}`}
+                      className={`nav-item ${isActive || isSubmenuActive ? 'nav-item-active' : ''}`}
                       onClick={() => toggleMenu(item.label)}
                     >
                       <Icon size={20} />
@@ -234,7 +269,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                             key={subItem.path}
                             to={subItem.path}
                             className={`nav-item nav-subitem ${isSubActive ? 'nav-item-active' : ''}`}
-                            onClick={() => window.innerWidth < 768 && onToggle()}
                           >
                             <SubIcon size={16} />
                             <span>{subItem.label}</span>
@@ -247,7 +281,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
                   <Link
                     to={item.path}
                     className={`nav-item ${isActive ? 'nav-item-active' : ''}`}
-                    onClick={() => window.innerWidth < 768 && onToggle()}
                   >
                     <Icon size={20} />
                     <span>{item.label}</span>

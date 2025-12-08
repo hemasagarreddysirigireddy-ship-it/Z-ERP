@@ -15,6 +15,14 @@ const Vendors = lazy(() => import('./Pages/Vendors'));
 const ProductsServices = lazy(() => import('./Pages/ProductsServices'));
 const Admin = lazy(() => import('./Pages/Admin'));
 
+// Sales Module Components
+const ProposalForm = lazy(() => import('./Pages/Sales/ProposalForm'));
+const EstimateForm = lazy(() => import('./Pages/Sales/EstimateForm'));
+const InvoiceForm = lazy(() => import('./Pages/Sales/InvoiceForm'));
+const InvoiceView = lazy(() => import('./Pages/Sales/InvoiceView'));
+const BatchPayments = lazy(() => import('./Pages/Sales/BatchPayments'));
+const CreditNoteForm = lazy(() => import('./Pages/Sales/CreditNoteForm'));
+
 // Loading component
 function Loading() {
   return (
@@ -55,9 +63,20 @@ function App() {
           {/* Sales Module */}
           <Route path="/sales" element={<Sales />} />
           <Route path="/sales/proposals" element={<Sales />} />
+          <Route path="/sales/proposals/new" element={<ProposalForm />} />
+          <Route path="/sales/proposals/edit/:id" element={<ProposalForm />} />
+          <Route path="/sales/estimates" element={<Sales />} />
+          <Route path="/sales/estimates/new" element={<EstimateForm />} />
+          <Route path="/sales/estimates/edit/:id" element={<EstimateForm />} />
           <Route path="/sales/invoices" element={<Sales />} />
+          <Route path="/sales/invoices/new" element={<InvoiceForm />} />
+          <Route path="/sales/invoices/edit/:id" element={<InvoiceForm />} />
+          <Route path="/sales/invoices/:id" element={<InvoiceView />} />
+          <Route path="/sales/invoices/batch-payments" element={<BatchPayments />} />
           <Route path="/sales/payments" element={<Sales />} />
           <Route path="/sales/credit-notes" element={<Sales />} />
+          <Route path="/sales/credit-notes/new" element={<CreditNoteForm />} />
+          <Route path="/sales/credit-notes/edit/:id" element={<CreditNoteForm />} />
           
           {/* Accounts Module */}
           <Route path="/accounts" element={<Accounts />} />
