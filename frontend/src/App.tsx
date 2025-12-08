@@ -1,5 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
+import { ToastProvider } from './components/Toast';
+import { ThemeProvider } from './context/ThemeContext';
+import Loading from './components/Loading';
 import './styles/Dashboard.css';
 
 // Lazy load components
@@ -16,23 +19,6 @@ const Vendors = lazy(() => import('./pages/Vendors'));
 const ProductsServices = lazy(() => import('./pages/ProductsServices'));
 const Admin = lazy(() => import('./pages/Admin'));
 
-// Loading component
-function Loading() {
-  return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh',
-      fontSize: '20px',
-      color: '#00d97e'
-    }}>
-      <div className="loading-spinner"></div>
-      <span style={{ marginLeft: '1rem' }}>Loading...</span>
-    </div>
-  );
-}
-
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -41,10 +27,12 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <Router>
-      <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
+    <ThemeProvider>
+      <ToastProvider>
+        <Router>
+          <Suspense fallback={<Loading message="Loading application..." />}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
           <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           
           {/* Projects Module */}
@@ -63,7 +51,8 @@ function App() {
           {/* Accounts Module */}
           <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/banking" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
-          <Route path="/accounts/income-expense" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/income" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/expenses" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/receivables" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/payables" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/reports" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
@@ -109,6 +98,8 @@ function App() {
         </Routes>
       </Suspense>
     </Router>
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
 

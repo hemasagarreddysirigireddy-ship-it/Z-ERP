@@ -24,6 +24,7 @@ import {
   UserPlus,
   MessageSquare,
   TrendingUp,
+  TrendingDown,
   Wallet,
   BookOpen,
   Calendar
@@ -126,7 +127,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       badge: null, 
       submenu: [
         { icon: Building2, label: 'Banking', path: '/accounts/banking' },
-        { icon: TrendingUp, label: 'Income & Expense', path: '/accounts/income-expense' },
+        { icon: TrendingUp, label: 'Income', path: '/accounts/income' },
+        { icon: TrendingDown, label: 'Expenses', path: '/accounts/expenses' },
         { icon: Users, label: 'Receivables', path: '/accounts/receivables' },
         { icon: FileText, label: 'Payables', path: '/accounts/payables' },
         { icon: BarChart3, label: 'Reports', path: '/accounts/reports' },

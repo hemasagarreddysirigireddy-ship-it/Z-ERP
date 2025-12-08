@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Share2, Clock, Bell, Plus, Menu, MessageSquare, User, Settings, LogOut, ChevronDown, X, Tag, Calendar, MapPin, Zap, TrendingUp, Award, Coffee, Target, Activity, Brain, Timer, Mail, Phone, CheckCircle, AlertCircle, Info, Star, Send, RotateCcw, Copy, Link2, Users, Building2, Globe2 } from 'lucide-react';
 import EditProfile from '../Pages/EditProfile';
 import { useLanguage } from '../i18n/LanguageContext';
+import ThemeToggle from './ThemeToggle';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -528,6 +529,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
       </div>
 
       <div className="header-right">
+        {/* Theme Toggle */}
+        <ThemeToggle />
+        
         <button 
           className="icon-btn icon-btn-modern" 
           title="Share"

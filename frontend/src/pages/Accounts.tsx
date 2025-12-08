@@ -3,6 +3,8 @@ import { useLocation } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import BankAccounts from '../modules/accounts/BankAccounts';
+import Income from './Income';
+import Expenses from './Expenses';
 import '../styles/Dashboard.css';
 
 const Accounts = () => {
@@ -26,17 +28,14 @@ const Accounts = () => {
       return <BankAccounts />;
     }
 
-    // Income & Expense Section
-    if (path === '/accounts/income-expense') {
-      return (
-        <div style={{ padding: '24px', background: '#F8FAFC', minHeight: '100%' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1E293B', marginBottom: '8px' }}>Income & Expense</h2>
-          <p style={{ color: '#64748B', marginBottom: '24px' }}>Manage income and expenses</p>
-          <div style={{ background: 'white', padding: '40px', borderRadius: '12px', textAlign: 'center' }}>
-            <p style={{ color: '#94A3B8' }}>Coming soon...</p>
-          </div>
-        </div>
-      );
+    // Income Section
+    if (path === '/accounts/income') {
+      return <Income />;
+    }
+
+    // Expenses Section
+    if (path === '/accounts/expenses') {
+      return <Expenses />;
     }
 
     // Receivables Section
