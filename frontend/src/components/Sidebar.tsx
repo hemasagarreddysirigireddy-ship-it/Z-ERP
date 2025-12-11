@@ -27,7 +27,9 @@ import {
   TrendingDown,
   Wallet,
   BookOpen,
-  Calendar
+  Calendar,
+  Scale,
+  Calculator
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -115,9 +117,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       badge: null, 
       submenu: [
         { icon: FileSignature, label: 'Proposals', path: '/sales/proposals' },
+        { icon: Calculator, label: 'Estimates', path: '/sales/estimates' },
         { icon: FileText, label: 'Invoices', path: '/sales/invoices' },
-        { icon: Receipt, label: 'Payment Slips', path: '/sales/payments' },
-        { icon: CreditCard, label: 'Credit Notes', path: '/sales/credit-notes' }
+        { icon: Receipt, label: 'Payment Slips', path: '/sales/payments' }
       ]
     },
     { 
@@ -129,6 +131,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
         { icon: Building2, label: 'Banking', path: '/accounts/banking' },
         { icon: TrendingUp, label: 'Income', path: '/accounts/income' },
         { icon: TrendingDown, label: 'Expenses', path: '/accounts/expenses' },
+        { icon: Scale, label: 'Balance Sheet', path: '/accounts/balancesheet' },
         { icon: Users, label: 'Receivables', path: '/accounts/receivables' },
         { icon: FileText, label: 'Payables', path: '/accounts/payables' },
         { icon: BarChart3, label: 'Reports', path: '/accounts/reports' },
@@ -218,8 +221,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       <aside className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
         <div className="sidebar-header">
           <div className="logo">
-            <span className="logo-text-zollid">ZOLLID</span>
-            <sup className="logo-registered">®</sup>
+            <span className="logo-text-zollid">Zollid</span>
             <span className="logo-text-erp">ERP</span>
           </div>
           <button className="sidebar-close" onClick={onToggle}>

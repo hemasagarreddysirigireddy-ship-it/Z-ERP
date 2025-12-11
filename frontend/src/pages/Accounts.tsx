@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import BankAccounts from '../modules/accounts/BankAccounts';
 import Income from './Income';
 import Expenses from './Expenses';
+import BalanceSheet from './BalanceSheet';
 import '../styles/Dashboard.css';
 
 const Accounts = () => {
@@ -36,6 +37,11 @@ const Accounts = () => {
     // Expenses Section
     if (path === '/accounts/expenses') {
       return <Expenses />;
+    }
+
+    // Balance Sheet Section
+    if (path === '/accounts/balancesheet') {
+      return <BalanceSheet />;
     }
 
     // Receivables Section

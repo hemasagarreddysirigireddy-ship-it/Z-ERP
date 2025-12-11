@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import RevenueChart from '../components/RevenueChart';
+import SalesPipelineChart from '../components/SalesPipelineChart';
+import PerformanceChart from '../components/PerformanceChart';
+import ProjectStatusChart from '../components/ProjectStatusChart';
 import { 
   FileText,
   UserCheck,
@@ -16,7 +20,12 @@ import {
   ChevronRight,
   Search,
   BarChart3,
-  RefreshCw
+  RefreshCw,
+  Activity,
+  MessageSquare,
+  Upload,
+  Calendar,
+  User
 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
@@ -43,15 +52,15 @@ const Dashboard: React.FC = () => {
   // Top Stats Cards
   const statsCards = [
     {
-      title: 'TEMPLATES',
+      title: 'Projects',
       value: '3',
-      subtitle: '3 Approved',
+      subtitle: '3 Active',
       icon: FileText,
       color: 'stat-yellow',
       iconBg: 'bg-yellow'
     },
     {
-      title: 'LEADS',
+      title: 'Tasks',
       value: '136',
       subtitle: '0 this month',
       icon: TrendingUp,
@@ -59,7 +68,7 @@ const Dashboard: React.FC = () => {
       iconBg: 'bg-blue'
     },
     {
-      title: 'CONTACTS',
+      title: 'Contacts',
       value: '56',
       subtitle: '2 this month',
       icon: UserCheck,
@@ -67,9 +76,9 @@ const Dashboard: React.FC = () => {
       iconBg: 'bg-green'
     },
     {
-      title: 'BOTS',
+      title: 'Pending Tasks',
       value: '1',
-      subtitle: '0 Messages sent',
+      subtitle: '0 Completed',
       icon: Bot,
       color: 'stat-gray',
       iconBg: 'bg-gray'
@@ -160,6 +169,76 @@ const Dashboard: React.FC = () => {
       id: 2,
       subject: 'Weekly ZOLLID Team Meeting – Building Attitude, Skill & Knowledge',
       date: '11-04-2025 10:15 PM'
+    }
+  ];
+
+  // Latest Activity Data
+  const latestActivityData = [
+    {
+      id: 1,
+      type: 'task_completed',
+      user: 'Sarah Johnson',
+      action: 'completed task',
+      target: 'UI Design Review',
+      time: '2 minutes ago',
+      avatar: '👩‍💼',
+      color: '#10b981',
+      icon: 'check'
+    },
+    {
+      id: 2,
+      type: 'project_created',
+      user: 'Mike Chen',
+      action: 'created new project',
+      target: 'Mobile App Development',
+      time: '15 minutes ago',
+      avatar: '👨‍💻',
+      color: '#6366f1',
+      icon: 'folder'
+    },
+    {
+      id: 3,
+      type: 'comment_added',
+      user: 'Emma Wilson',
+      action: 'commented on',
+      target: 'Backend API Integration',
+      time: '1 hour ago',
+      avatar: '👩‍🔬',
+      color: '#8b5cf6',
+      icon: 'message'
+    },
+    {
+      id: 4,
+      type: 'file_uploaded',
+      user: 'Alex Turner',
+      action: 'uploaded files to',
+      target: 'Design Assets Folder',
+      time: '2 hours ago',
+      avatar: '👨‍🎨',
+      color: '#f59e0b',
+      icon: 'upload'
+    },
+    {
+      id: 5,
+      type: 'meeting_scheduled',
+      user: 'Rachel Green',
+      action: 'scheduled meeting',
+      target: 'Q4 Planning Session',
+      time: '3 hours ago',
+      avatar: '👩‍💼',
+      color: '#14b8a6',
+      icon: 'calendar'
+    },
+    {
+      id: 6,
+      type: 'task_assigned',
+      user: 'David Park',
+      action: 'assigned task to you',
+      target: 'Database Optimization',
+      time: '5 hours ago',
+      avatar: '👨‍💼',
+      color: '#ef4444',
+      icon: 'user'
     }
   ];
 
@@ -357,6 +436,20 @@ const Dashboard: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+
+          {/* Advanced Charts Section */}
+          <div className="charts-grid">
+            <div className="chart-row-main">
+              <RevenueChart />
+            </div>
+            <div className="chart-row-secondary">
+              <SalesPipelineChart />
+              <PerformanceChart />
+            </div>
+            <div className="chart-row-tertiary">
+              <ProjectStatusChart />
+            </div>
           </div>
 
           {/* Main Content Grid */}
@@ -962,150 +1055,160 @@ const Dashboard: React.FC = () => {
 
             {/* Right Section - Sidebar Panels */}
             <div className="right-section">
-              {/* My To Do Items */}
-              <div className="sidebar-panel">
+              {/* Team Performance */}
+              <div className="sidebar-panel team-performance-panel">
                 <div className="panel-header">
                   <div className="panel-title">
-                    <CheckCircle2 size={18} />
-                    <span>My To Do Items</span>
+                    <TrendingUp size={18} />
+                    <span>Team Performance</span>
+                  </div>
+                  <div className="panel-actions">
+                    <button className="panel-action-btn">View Details</button>
+                  </div>
+                </div>
+
+                <div className="performance-metrics">
+                  <div className="metric-card metric-success">
+                    <div className="metric-icon">🎯</div>
+                    <div className="metric-info">
+                      <h4 className="metric-value">94%</h4>
+                      <p className="metric-label">Tasks Completed</p>
+                    </div>
+                    <div className="metric-trend trend-up">+8%</div>
+                  </div>
+
+                  <div className="metric-card metric-primary">
+                    <div className="metric-icon">⚡</div>
+                    <div className="metric-info">
+                      <h4 className="metric-value">87%</h4>
+                      <p className="metric-label">Productivity</p>
+                    </div>
+                    <div className="metric-trend trend-up">+12%</div>
+                  </div>
+
+                  <div className="metric-card metric-warning">
+                    <div className="metric-icon">⏱️</div>
+                    <div className="metric-info">
+                      <h4 className="metric-value">156h</h4>
+                      <p className="metric-label">Hours Logged</p>
+                    </div>
+                    <div className="metric-trend trend-up">+5%</div>
+                  </div>
+
+                  <div className="metric-card metric-info">
+                    <div className="metric-icon">🚀</div>
+                    <div className="metric-info">
+                      <h4 className="metric-value">23</h4>
+                      <p className="metric-label">Active Projects</p>
+                    </div>
+                    <div className="metric-trend trend-down">-2</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Latest Activity Timeline */}
+              <div className="sidebar-panel latest-activity-panel">
+                <div className="panel-header">
+                  <div className="panel-title">
+                    <Activity size={18} />
+                    <span>Latest Activity</span>
                   </div>
                   <div className="panel-actions">
                     <button className="panel-action-btn">View All</button>
-                    <button className="panel-action-btn">New To Do</button>
-                  </div>
-                </div>
-
-                {/* Latest to do's */}
-                <div className="todo-section">
-                  <h4 className="todo-section-title">
-                    ⚠️ Latest to do's
-                  </h4>
-                  <p className="todo-empty">No todos found</p>
-                </div>
-
-                {/* Latest finished to do's */}
-                <div className="todo-section">
-                  <h4 className="todo-section-title">
-                    ✓ Latest finished to do's
-                  </h4>
-                  <p className="todo-empty">No finished todos found</p>
-                </div>
-              </div>
-
-              {/* Leads Overview */}
-              <div className="sidebar-panel">
-                <div className="panel-header">
-                  <div className="panel-title">
-                    <BarChart3 size={18} />
-                    <span>Leads Overview</span>
-                  </div>
-                </div>
-
-                <div className="leads-chart">
-                  <div className="chart-legend">
-                    <div className="legend-item">
-                      <span className="legend-color bg-cyan"></span>
-                      <span>New Enquiry</span>
-                    </div>
-                    <div className="legend-item">
-                      <span className="legend-color bg-green"></span>
-                      <span>Follow up</span>
-                    </div>
-                    <div className="legend-item">
-                      <span className="legend-color bg-red"></span>
-                      <span>Not interested</span>
-                    </div>
-                    <div className="legend-item">
-                      <span className="legend-color bg-lime"></span>
-                      <span>Customer</span>
-                    </div>
-                    <div className="legend-item">
-                      <span className="legend-color bg-orange"></span>
-                      <span>Lost Leads</span>
-                    </div>
-                  </div>
-                  
-                  {/* Placeholder for chart - would integrate a chart library */}
-                  <div className="chart-placeholder">
-                    <div className="donut-chart">
-                      <svg viewBox="0 0 100 100" className="donut-svg">
-                        <circle cx="50" cy="50" r="40" fill="transparent" stroke="#3b82f6" strokeWidth="20" />
-                      </svg>
-                      <div className="chart-center-text">
-                        <span className="chart-value">136</span>
-                        <span className="chart-label">Total Leads</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Latest Project Activity */}
-              <div className="sidebar-panel">
-                <div className="panel-header">
-                  <div className="panel-title">
-                    <FolderKanban size={18} />
-                    <span>Latest Project Activity</span>
                   </div>
                 </div>
 
                 <div className="activity-timeline">
-                  <div className="activity-item-timeline">
-                    <div className="activity-marker"></div>
-                    <div className="activity-content-timeline">
-                      <div className="activity-header-timeline">
-                        <strong>2 DAYS AGO</strong>
+                  {latestActivityData.map((activity, index) => (
+                    <div key={activity.id} className="activity-item" style={{'--activity-color': activity.color} as React.CSSProperties}>
+                      <div className="activity-avatar">
+                        <span className="avatar-emoji">{activity.avatar}</span>
+                        <div className="activity-pulse"></div>
                       </div>
-                      <p className="activity-text">
-                        <strong>Finas Zollid</strong> - Added new task assignee
-                      </p>
-                      <p className="activity-meta">Project Name: <a href="#">Web RTC</a></p>
-                      <p className="activity-meta">Friend end UI Design - C Janardhan</p>
+                      <div className="activity-content">
+                        <div className="activity-header">
+                          <span className="activity-user">{activity.user}</span>
+                          <span className="activity-time">{activity.time}</span>
+                        </div>
+                        <div className="activity-body">
+                          <span className="activity-action">{activity.action}</span>
+                          <span className="activity-target">{activity.target}</span>
+                        </div>
+                        <div className="activity-type-badge" data-type={activity.type}>
+                          {activity.icon === 'check' && <CheckCircle2 size={12} />}
+                          {activity.icon === 'folder' && <FolderKanban size={12} />}
+                          {activity.icon === 'message' && <MessageSquare size={12} />}
+                          {activity.icon === 'upload' && <Upload size={12} />}
+                          {activity.icon === 'calendar' && <Calendar size={12} />}
+                          {activity.icon === 'user' && <User size={12} />}
+                        </div>
+                      </div>
                     </div>
+                  ))}
+                </div>
+
+                <div className="activity-footer">
+                  <button className="load-more-btn">
+                    <RefreshCw size={14} />
+                    Load More Activities
+                  </button>
+                </div>
+              </div>
+
+              {/* Revenue Insights */}
+              <div className="sidebar-panel revenue-insights-panel">
+                <div className="panel-header">
+                  <div className="panel-title">
+                    <BarChart3 size={18} />
+                    <span>Revenue Insights</span>
                   </div>
-                  
-                  <div className="activity-item-timeline">
-                    <div className="activity-marker"></div>
-                    <div className="activity-content-timeline">
-                      <div className="activity-header-timeline">
-                        <strong>2 DAYS AGO</strong>
-                      </div>
-                      <p className="activity-text">
-                        <strong>Finas Zollid</strong> - Added new task assignee
-                      </p>
-                      <p className="activity-meta">Project Name: <a href="#">Web RTC</a></p>
-                      <p className="activity-meta">Friend end UI Design - Finas Zollid</p>
-                    </div>
+                </div>
+
+                <div className="revenue-summary">
+                  <div className="revenue-total">
+                    <h3 className="revenue-amount">$284,567</h3>
+                    <p className="revenue-period">Total Revenue This Month</p>
+                    <div className="revenue-change positive">+18.4% from last month</div>
                   </div>
 
-                  <div className="activity-item-timeline">
-                    <div className="activity-marker"></div>
-                    <div className="activity-content-timeline">
-                      <div className="activity-header-timeline">
-                        <strong>2 DAYS AGO</strong>
+                  <div className="revenue-breakdown">
+                    <div className="revenue-item revenue-subscriptions">
+                      <div className="revenue-item-header">
+                        <span className="revenue-icon">💳</span>
+                        <span className="revenue-label">Subscriptions</span>
                       </div>
-                      <p className="activity-text">
-                        <strong>Finas Zollid</strong> - Created the project
-                      </p>
-                      <p className="activity-meta">Project Name: <a href="#">Web RTC</a></p>
+                      <div className="revenue-value">$142,300</div>
+                      <div className="revenue-bar">
+                        <div className="revenue-fill" style={{width: '50%'}}></div>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="activity-item-timeline">
-                    <div className="activity-marker"></div>
-                    <div className="activity-content-timeline">
-                      <div className="activity-header-timeline">
-                        <strong>2 DAYS AGO</strong>
+                    <div className="revenue-item revenue-services">
+                      <div className="revenue-item-header">
+                        <span className="revenue-icon">🛠️</span>
+                        <span className="revenue-label">Services</span>
                       </div>
-                      <p className="activity-text">
-                        <strong>Finas Zollid</strong> - Added new team member
-                      </p>
-                      <p className="activity-meta">Project Name: <a href="#">Web RTC</a></p>
-                      <p className="activity-meta">Swaroop Pattar</p>
+                      <div className="revenue-value">$85,467</div>
+                      <div className="revenue-bar">
+                        <div className="revenue-fill" style={{width: '30%'}}></div>
+                      </div>
+                    </div>
+
+                    <div className="revenue-item revenue-products">
+                      <div className="revenue-item-header">
+                        <span className="revenue-icon">📦</span>
+                        <span className="revenue-label">Products</span>
+                      </div>
+                      <div className="revenue-value">$56,800</div>
+                      <div className="revenue-bar">
+                        <div className="revenue-fill" style={{width: '20%'}}></div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+
             </div>
           </div>
         </div>

@@ -19,6 +19,19 @@ const Vendors = lazy(() => import('./pages/Vendors'));
 const ProductsServices = lazy(() => import('./pages/ProductsServices'));
 const Admin = lazy(() => import('./pages/Admin'));
 
+// Sales Module Components
+const ProposalsList = lazy(() => import('./Pages/Sales/ProposalsList'));
+const ProposalForm = lazy(() => import('./Pages/Sales/ProposalForm'));
+const EstimatesList = lazy(() => import('./Pages/Sales/EstimatesList'));
+const EstimateForm = lazy(() => import('./Pages/Sales/EstimateForm'));
+const InvoicesList = lazy(() => import('./Pages/Sales/InvoicesList'));
+const InvoiceForm = lazy(() => import('./Pages/Sales/InvoiceForm'));
+const InvoiceView = lazy(() => import('./Pages/Sales/InvoiceView'));
+const PaymentsList = lazy(() => import('./Pages/Sales/PaymentsList'));
+const BatchPayments = lazy(() => import('./Pages/Sales/BatchPayments'));
+const CreditNotesList = lazy(() => import('./Pages/Sales/CreditNotesList'));
+const CreditNoteForm = lazy(() => import('./Pages/Sales/CreditNoteForm'));
+
 // Protected Route Component
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
@@ -43,16 +56,28 @@ function App() {
           
           {/* Sales Module */}
           <Route path="/sales" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
-          <Route path="/sales/proposals" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
-          <Route path="/sales/invoices" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
-          <Route path="/sales/payments" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
-          <Route path="/sales/credit-notes" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
+          <Route path="/sales/proposals" element={<ProtectedRoute><ProposalsList /></ProtectedRoute>} />
+          <Route path="/sales/proposals/new" element={<ProtectedRoute><ProposalForm /></ProtectedRoute>} />
+          <Route path="/sales/proposals/edit/:id" element={<ProtectedRoute><ProposalForm /></ProtectedRoute>} />
+          <Route path="/sales/estimates" element={<ProtectedRoute><EstimatesList /></ProtectedRoute>} />
+          <Route path="/sales/estimates/new" element={<ProtectedRoute><EstimateForm /></ProtectedRoute>} />
+          <Route path="/sales/estimates/edit/:id" element={<ProtectedRoute><EstimateForm /></ProtectedRoute>} />
+          <Route path="/sales/invoices" element={<ProtectedRoute><InvoicesList /></ProtectedRoute>} />
+          <Route path="/sales/invoices/new" element={<ProtectedRoute><InvoiceForm /></ProtectedRoute>} />
+          <Route path="/sales/invoices/edit/:id" element={<ProtectedRoute><InvoiceForm /></ProtectedRoute>} />
+          <Route path="/sales/invoices/view/:id" element={<ProtectedRoute><InvoiceView /></ProtectedRoute>} />
+          <Route path="/sales/payments" element={<ProtectedRoute><PaymentsList /></ProtectedRoute>} />
+          <Route path="/sales/payments/batch" element={<ProtectedRoute><BatchPayments /></ProtectedRoute>} />
+          <Route path="/sales/credit-notes" element={<ProtectedRoute><CreditNotesList /></ProtectedRoute>} />
+          <Route path="/sales/credit-notes/new" element={<ProtectedRoute><CreditNoteForm /></ProtectedRoute>} />
+          <Route path="/sales/credit-notes/edit/:id" element={<ProtectedRoute><CreditNoteForm /></ProtectedRoute>} />
           
           {/* Accounts Module */}
           <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/banking" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/income" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/expenses" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/balancesheet" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/receivables" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/payables" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/reports" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />

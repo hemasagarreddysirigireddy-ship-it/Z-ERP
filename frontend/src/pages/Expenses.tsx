@@ -19,7 +19,12 @@ import {
   X,
   BarChart3,
   Filter,
-  RefreshCw
+  RefreshCw,
+  ChevronDown,
+  CalendarDays,
+  Zap,
+  Target,
+  TrendingUp
 } from 'lucide-react';
 import '../modules/accounts/IncomeExpense.css';
 
@@ -37,6 +42,22 @@ interface ExpenseTransaction {
   notes?: string;
 }
 
+interface PeriodOption {
+  value: string;
+  label: string;
+  icon: React.ComponentType<{ size?: number }>;
+}
+
+interface ExpenseStats {
+  totalExpense: number;
+  pendingExpense: number;
+  completedTransactions: number;
+  growthPercentage: number;
+  averageTransaction: number;
+  highestTransaction: number;
+  categoryBreakdown: { [key: string]: number };
+}
+
 const Expenses: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -44,6 +65,26 @@ const Expenses: React.FC = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [showFilters, setShowFilters] = useState(true);
+  const [showPeriodDropdown, setShowPeriodDropdown] = useState(false);
+  const [selectedPeriod, setSelectedPeriod] = useState('today');
+  const [showCustomDateModal, setShowCustomDateModal] = useState(false);
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+
+  // Period options with icons
+  const periodOptions: PeriodOption[] = [
+    { value: 'today', label: 'Today', icon: Calendar },
+    { value: 'yesterday', label: 'Yesterday', icon: Calendar },
+    { value: 'week', label: 'This Week', icon: CalendarDays },
+    { value: 'lastweek', label: 'Last Week', icon: CalendarDays },
+    { value: 'month', label: 'This Month', icon: BarChart3 },
+    { value: 'lastmonth', label: 'Last Month', icon: BarChart3 },
+    { value: 'quarter', label: 'This Quarter', icon: Target },
+    { value: 'year', label: 'This Year', icon: TrendingUp },
+    { value: 'lastyear', label: 'Last Year', icon: TrendingUp },
+    { value: 'custom', label: 'Custom Range', icon: CalendarDays }
+  ];
   
   // Form state
   const [formData, setFormData] = useState({
@@ -186,9 +227,92 @@ const Expenses: React.FC = () => {
     }
   ]);
 
+  // Filter by period function
+  const filterByPeriod = (data: ExpenseTransaction[]) => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    switch (selectedPeriod) {
+      case 'today':
+        return data.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate >= today;
+        });
+      
+      case 'yesterday':
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        return data.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate >= yesterday && itemDate < today;
+        });
+      
+      case 'week':
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - today.getDay());
+        return data.filter(item => new Date(item.date) >= weekStart);
+      
+      case 'lastweek':
+        const lastWeekStart = new Date(today);
+        lastWeekStart.setDate(today.getDate() - today.getDay() - 7);
+        const lastWeekEnd = new Date(lastWeekStart);
+        lastWeekEnd.setDate(lastWeekStart.getDate() + 7);
+        return data.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate >= lastWeekStart && itemDate < lastWeekEnd;
+        });
+      
+      case 'month':
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        return data.filter(item => new Date(item.date) >= monthStart);
+      
+      case 'lastmonth':
+        const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+        const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 1);
+        return data.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate >= lastMonthStart && itemDate < lastMonthEnd;
+        });
+      
+      case 'quarter':
+        const quarterMonth = Math.floor(now.getMonth() / 3) * 3;
+        const quarterStart = new Date(now.getFullYear(), quarterMonth, 1);
+        return data.filter(item => new Date(item.date) >= quarterStart);
+      
+      case 'year':
+        const yearStart = new Date(now.getFullYear(), 0, 1);
+        return data.filter(item => new Date(item.date) >= yearStart);
+      
+      case 'lastyear':
+        const lastYearStart = new Date(now.getFullYear() - 1, 0, 1);
+        const lastYearEnd = new Date(now.getFullYear(), 0, 1);
+        return data.filter(item => {
+          const itemDate = new Date(item.date);
+          return itemDate >= lastYearStart && itemDate < lastYearEnd;
+        });
+      
+      case 'custom':
+        if (customStartDate && customEndDate) {
+          const start = new Date(customStartDate);
+          const end = new Date(customEndDate);
+          end.setHours(23, 59, 59, 999);
+          return data.filter(item => {
+            const itemDate = new Date(item.date);
+            return itemDate >= start && itemDate <= end;
+          });
+        }
+        return data;
+      
+      default:
+        return data;
+    }
+  };
+
   // Filter expense data
   const filteredExpenses = useMemo(() => {
-    return expenseData.filter(item => {
+    let filtered = filterByPeriod(expenseData);
+
+    return filtered.filter(item => {
       const matchesSearch = searchQuery === '' || 
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.vendor?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -199,19 +323,42 @@ const Expenses: React.FC = () => {
       
       return matchesSearch && matchesCategory && matchesPayment;
     });
-  }, [expenseData, searchQuery, selectedCategory, selectedPaymentMethod]);
+  }, [expenseData, searchQuery, selectedCategory, selectedPaymentMethod, selectedPeriod, customStartDate, customEndDate]);
 
-  // Calculate statistics
-  const totalExpenses = filteredExpenses
-    .filter(item => item.status === 'completed')
-    .reduce((sum, item) => sum + item.amount, 0);
+  // Calculate comprehensive statistics
+  const stats: ExpenseStats = useMemo(() => {
+    const completed = filteredExpenses.filter(item => item.status === 'completed');
+    const pending = filteredExpenses.filter(item => item.status === 'pending');
+    
+    const totalExpense = completed.reduce((sum, item) => sum + item.amount, 0);
+    const pendingExpense = pending.reduce((sum, item) => sum + item.amount, 0);
+    const completedCount = completed.length;
+    
+    const categoryBreakdown: { [key: string]: number } = {};
+    completed.forEach(item => {
+      categoryBreakdown[item.category] = (categoryBreakdown[item.category] || 0) + item.amount;
+    });
 
-  const pendingExpenses = filteredExpenses
-    .filter(item => item.status === 'pending')
-    .reduce((sum, item) => sum + item.amount, 0);
+    const amounts = completed.map(item => item.amount);
+    const highestTransaction = amounts.length > 0 ? Math.max(...amounts) : 0;
+    const averageTransaction = completedCount > 0 ? totalExpense / completedCount : 0;
 
+    return {
+      totalExpense,
+      pendingExpense,
+      completedTransactions: completedCount,
+      growthPercentage: 18.3,
+      averageTransaction,
+      highestTransaction,
+      categoryBreakdown
+    };
+  }, [filteredExpenses]);
+
+  // Calculate statistics (keep for backward compatibility)
+  const totalExpenses = stats.totalExpense;
+  const pendingExpenses = stats.pendingExpense;
   const transactionCount = filteredExpenses.length;
-  const growthPercentage = 8.3; // Mock data
+  const growthPercentage = stats.growthPercentage;
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
@@ -241,6 +388,34 @@ const Expenses: React.FC = () => {
     setSearchQuery('');
     setSelectedCategory('all');
     setSelectedPaymentMethod('all');
+  };
+
+  const handlePeriodSelect = (value: string) => {
+    if (value === 'custom') {
+      setShowCustomDateModal(true);
+    } else {
+      setSelectedPeriod(value);
+    }
+    setShowPeriodDropdown(false);
+  };
+
+  const applyCustomDateRange = () => {
+    if (customStartDate && customEndDate) {
+      setSelectedPeriod('custom');
+      setShowCustomDateModal(false);
+      setIsGeneratingReport(true);
+      setTimeout(() => {
+        setIsGeneratingReport(false);
+      }, 1500);
+    }
+  };
+
+  const generateReport = () => {
+    setIsGeneratingReport(true);
+    setTimeout(() => {
+      setIsGeneratingReport(false);
+      alert('Expense report generated successfully! Download will start shortly.');
+    }, 2000);
   };
 
   const handleCreateExpense = (e: React.FormEvent) => {
@@ -422,6 +597,46 @@ const Expenses: React.FC = () => {
             <option value="Online">Online</option>
           </select>
           
+          {/* Period Dropdown */}
+          <div className="period-dropdown-container">
+            <button 
+              className="period-dropdown-trigger"
+              onClick={() => setShowPeriodDropdown(!showPeriodDropdown)}
+            >
+              <Calendar size={18} />
+              <span>{periodOptions.find(p => p.value === selectedPeriod)?.label || 'Select Period'}</span>
+              <ChevronDown size={16} className={showPeriodDropdown ? 'rotate-180' : ''} />
+            </button>
+            
+            {showPeriodDropdown && (
+              <>
+                <div className="dropdown-overlay" onClick={() => setShowPeriodDropdown(false)} />
+                <div className="period-dropdown-menu">
+                  <div className="dropdown-header">
+                    <Zap size={16} />
+                    <span>Quick Select Period</span>
+                  </div>
+                  <div className="dropdown-options">
+                    {periodOptions.map(option => {
+                      const Icon = option.icon;
+                      return (
+                        <button
+                          key={option.value}
+                          className={`dropdown-option ${selectedPeriod === option.value ? 'active' : ''}`}
+                          onClick={() => handlePeriodSelect(option.value)}
+                        >
+                          <Icon size={18} />
+                          <span>{option.label}</span>
+                          {selectedPeriod === option.value && <CheckCircle size={16} className="check-icon" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+          
           {(searchQuery || selectedCategory !== 'all' || selectedPaymentMethod !== 'all') && (
             <button className="btn-clear-filters" onClick={clearFilters}>
               Clear Filters
@@ -435,7 +650,10 @@ const Expenses: React.FC = () => {
           {filteredExpenses.length === 0 ? (
             <div className="no-data">
               <FileText size={48} />
-              <p>No expense transactions found</p>
+              <p>No expense transactions found for selected period</p>
+              <button className="btn-primary-blue" onClick={() => setSelectedPeriod('today')}>
+                Reset to Today
+              </button>
             </div>
           ) : (
             filteredExpenses.map(item => (
@@ -627,6 +845,75 @@ const Expenses: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Custom Date Range Modal */}
+      {showCustomDateModal && (
+        <div className="modal-overlay" onClick={() => setShowCustomDateModal(false)}>
+          <div className="modal-content custom-date-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Select Custom Date Range</h2>
+              <button className="modal-close" onClick={() => setShowCustomDateModal(false)}>
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="modal-form">
+              <div className="form-group">
+                <label htmlFor="startDate">Start Date *</label>
+                <input
+                  type="date"
+                  id="startDate"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="endDate">End Date *</label>
+                <input
+                  type="date"
+                  id="endDate"
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                  required
+                  min={customStartDate}
+                />
+              </div>
+
+              <div className="date-range-preview">
+                {customStartDate && customEndDate && (
+                  <div className="preview-info">
+                    <CalendarDays size={20} />
+                    <span>
+                      {formatDate(customStartDate)} to {formatDate(customEndDate)}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="modal-actions">
+              <button 
+                type="button" 
+                className="btn-secondary" 
+                onClick={() => setShowCustomDateModal(false)}
+              >
+                Cancel
+              </button>
+              <button 
+                type="button" 
+                className="btn-primary-blue"
+                onClick={applyCustomDateRange}
+                disabled={!customStartDate || !customEndDate}
+              >
+                <Target size={18} />
+                Generate Report
+              </button>
+            </div>
           </div>
         </div>
       )}
