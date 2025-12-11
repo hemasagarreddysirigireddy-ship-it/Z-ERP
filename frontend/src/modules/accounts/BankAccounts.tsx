@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Building2, 
   Plus, 
@@ -24,7 +25,13 @@ import {
   Mail,
   MapPin,
   Hash,
-  Shield
+  Shield,
+  RefreshCw,
+  Bell,
+  BarChart3,
+  Globe,
+  Split,
+  Sparkles
 } from 'lucide-react';
 import './BankAccounts.css';
 
@@ -88,6 +95,7 @@ interface Transaction {
 }
 
 const BankAccounts: React.FC = () => {
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<'overview' | 'transactions' | 'accounts'>('overview');
   const [selectedAccount, setSelectedAccount] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -576,6 +584,170 @@ const BankAccounts: React.FC = () => {
             <div className="stat-label">Active Accounts</div>
             <div className="stat-value">{activeAccounts}</div>
             <div className="stat-subtitle">Across {new Set(bankAccounts.map(a => a.bankName)).size} banks</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Access Features Grid */}
+      <div className="features-section">
+        <div className="features-header">
+          <h2>
+            <Sparkles size={24} />
+            Quick Access Features
+          </h2>
+          <p>Explore all banking and accounting capabilities</p>
+        </div>
+
+        <div className="features-grid">
+          {/* Bank Reconciliation */}
+          <div className="feature-card" onClick={() => navigate('/accounts/reconciliation')}>
+            <div className="feature-icon reconciliation">
+              <RefreshCw size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Bank Reconciliation</h3>
+              <p>Match transactions & resolve differences automatically</p>
+              <div className="feature-badge hot">Popular</div>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Recurring Transactions */}
+          <div className="feature-card" onClick={() => navigate('/accounts/recurring-transactions')}>
+            <div className="feature-icon recurring">
+              <Repeat size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Recurring Transactions</h3>
+              <p>Automate regular payments & collections</p>
+              <div className="feature-badge">8 Active</div>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Cheque Management */}
+          <div className="feature-card" onClick={() => navigate('/accounts/cheque-management')}>
+            <div className="feature-icon cheque">
+              <FileText size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Cheque Management</h3>
+              <p>Track cheques - issued, PDC, cleared, bounced</p>
+              <div className="feature-badge alert">3 Pending</div>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Transaction Approval */}
+          <div className="feature-card" onClick={() => navigate('/accounts/transaction-approval')}>
+            <div className="feature-icon approval">
+              <CheckCircle size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Approval Workflow</h3>
+              <p>Multi-level transaction approvals</p>
+              <div className="feature-badge alert">5 Awaiting</div>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Cash Management */}
+          <div className="feature-card" onClick={() => navigate('/accounts/cash-management')}>
+            <div className="feature-icon cash">
+              <DollarSign size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Cash & Petty Cash</h3>
+              <p>Manage cash entries with denomination counting</p>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Bank Statements */}
+          <div className="feature-card" onClick={() => navigate('/accounts/bank-statements')}>
+            <div className="feature-icon statements">
+              <FileText size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Generate Statements</h3>
+              <p>Create & export bank statements (PDF/Excel)</p>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Banking Analytics */}
+          <div className="feature-card" onClick={() => navigate('/accounts/banking-analytics')}>
+            <div className="feature-icon analytics">
+              <BarChart3 size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Banking Analytics</h3>
+              <p>Charts, trends & cash flow analysis</p>
+              <div className="feature-badge hot">Insights</div>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Alerts & Notifications */}
+          <div className="feature-card" onClick={() => navigate('/accounts/alerts-notifications')}>
+            <div className="feature-icon alerts">
+              <Bell size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Alerts & Notifications</h3>
+              <p>Manage alerts, reminders & warnings</p>
+              <div className="feature-badge alert">15 New</div>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Bank Feeds */}
+          <div className="feature-card" onClick={() => navigate('/accounts/bank-feeds')}>
+            <div className="feature-icon feeds">
+              <Download size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Bank Feeds & Import</h3>
+              <p>Auto-import from bank APIs & SMS parsing</p>
+              <div className="feature-badge">Auto Sync</div>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Split Transactions */}
+          <div className="feature-card" onClick={() => navigate('/accounts/split-transactions')}>
+            <div className="feature-icon split">
+              <Split size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Split Transactions</h3>
+              <p>Split across categories, projects & departments</p>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Multi-Currency */}
+          <div className="feature-card" onClick={() => navigate('/accounts/multi-currency')}>
+            <div className="feature-icon currency">
+              <Globe size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Multi-Currency</h3>
+              <p>Forex accounts & exchange rate tracking</p>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
+          </div>
+
+          {/* Audit Trail */}
+          <div className="feature-card" onClick={() => navigate('/accounts/audit-trail')}>
+            <div className="feature-icon audit">
+              <Shield size={28} />
+            </div>
+            <div className="feature-content">
+              <h3>Audit Trail</h3>
+              <p>Complete transaction history & compliance logs</p>
+            </div>
+            <ArrowUpRight className="feature-arrow" size={20} />
           </div>
         </div>
       </div>

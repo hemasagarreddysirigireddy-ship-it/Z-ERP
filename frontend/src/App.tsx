@@ -75,9 +75,21 @@ function App() {
           {/* Accounts Module */}
           <Route path="/accounts" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/banking" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/reconciliation" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/cheque-management" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/cash-management" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/bank-feeds" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/bank-statements" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/recurring-transactions" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/split-transactions" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/transaction-approval" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/multi-currency" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/income" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/expenses" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/banking-analytics" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/balancesheet" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/alerts-notifications" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
+          <Route path="/accounts/audit-trail" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/receivables" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/payables" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />
           <Route path="/accounts/reports" element={<ProtectedRoute><Accounts /></ProtectedRoute>} />

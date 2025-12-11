@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { 
   Building2, CreditCard, TrendingUp, TrendingDown, FileText, 
   Users, Receipt, Clock, Settings, ChevronDown, ChevronRight,
-  Search, Star, BarChart3, AlertCircle
+  Search, Star, BarChart3, AlertCircle, RefreshCw, CheckCircle,
+  Repeat, DollarSign, Bell, Download, Split, Globe, Shield
 } from 'lucide-react';
 import './AccountsSidebar.css';
 
@@ -41,9 +42,24 @@ const AccountsSidebar: React.FC<AccountsSidebarProps> = ({ activeSection, active
       description: 'Bank accounts, reconciliation, cheques, cash entries',
       subItems: [
         { id: 'bank-accounts', label: 'Bank Accounts', icon: <CreditCard size={18} />, description: 'View balances & linked statements' },
-        { id: 'reconciliation', label: 'Bank Reconciliation', icon: <BarChart3 size={18} />, description: 'Match transactions & resolve differences' },
+        { id: 'transactions', label: 'Transactions', icon: <Receipt size={18} />, description: 'View all transactions' },
+        { id: 'reconciliation', label: 'Bank Reconciliation', icon: <RefreshCw size={18} />, description: 'Match transactions & resolve differences' },
         { id: 'cheque-management', label: 'Cheque Management', icon: <FileText size={18} />, description: 'Track cheques pending, cleared, bounced', badge: 3 },
-        { id: 'cash-entries', label: 'Cash & Bank Entries', icon: <Receipt size={18} />, description: 'Record cash deposits & withdrawals' }
+        { id: 'cash-management', label: 'Cash & Petty Cash', icon: <DollarSign size={18} />, description: 'Manage cash & petty cash entries' },
+        { id: 'bank-feeds', label: 'Bank Feeds & Import', icon: <Download size={18} />, description: 'Auto-import from bank APIs' },
+        { id: 'bank-statements', label: 'Generate Statements', icon: <FileText size={18} />, description: 'Create & export statements' }
+      ]
+    },
+    {
+      id: 'transactions',
+      label: 'Transactions',
+      icon: <Repeat size={20} />,
+      description: 'Transaction management & automation',
+      subItems: [
+        { id: 'recurring-transactions', label: 'Recurring Transactions', icon: <Repeat size={18} />, description: 'Setup automatic recurring payments', badge: 8 },
+        { id: 'split-transactions', label: 'Split Transactions', icon: <Split size={18} />, description: 'Split across categories/projects' },
+        { id: 'transaction-approval', label: 'Approval Workflow', icon: <CheckCircle size={18} />, description: 'Multi-level transaction approvals', badge: 5 },
+        { id: 'multi-currency', label: 'Multi-Currency', icon: <Globe size={18} />, description: 'Manage forex accounts & rates' }
       ]
     },
     {
@@ -53,9 +69,7 @@ const AccountsSidebar: React.FC<AccountsSidebarProps> = ({ activeSection, active
       description: 'Track income sources & manage expenses',
       subItems: [
         { id: 'income', label: 'Income', icon: <TrendingUp size={18} />, description: 'Record all revenue & income' },
-        { id: 'expenses', label: 'Expenses', icon: <TrendingDown size={18} />, description: 'Manage bills & payments' },
-        { id: 'recurring-expenses', label: 'Recurring Expenses', icon: <Clock size={18} />, description: 'Setup automatic recurring bills', badge: 5 },
-        { id: 'expense-allocation', label: 'Expense Allocation', icon: <BarChart3 size={18} />, description: 'Allocate costs to projects/departments' }
+        { id: 'expenses', label: 'Expenses', icon: <TrendingDown size={18} />, description: 'Manage bills & payments' }
       ]
     },
     {
@@ -64,38 +78,36 @@ const AccountsSidebar: React.FC<AccountsSidebarProps> = ({ activeSection, active
       icon: <Users size={20} />,
       description: 'Manage customer payments & outstanding amounts',
       badge: 12,
-      subItems: [
-        { id: 'customer-ledger', label: 'Customer Ledger', icon: <FileText size={18} />, description: 'View customer account statements' },
-        { id: 'outstanding', label: 'Outstanding Receivables', icon: <AlertCircle size={18} />, description: 'Track overdue payments', badge: 12 },
-        { id: 'payment-receipts', label: 'Payment Receipts', icon: <Receipt size={18} />, description: 'Generate & manage receipts' },
-        { id: 'ageing-receivables', label: 'Ageing Report', icon: <BarChart3 size={18} />, description: 'Age-wise outstanding analysis' },
-        { id: 'due-alerts', label: 'Due Date Alerts', icon: <Clock size={18} />, description: 'Configure payment reminders' }
-      ]
+      path: '/accounts/receivables',
+      subItems: []
     },
     {
       id: 'payables',
       label: 'Payables',
       icon: <FileText size={20} />,
       description: 'Vendor bills & payment management',
+      path: '/accounts/payables',
+      subItems: []
+    },
+    {
+      id: 'analytics',
+      label: 'Analytics & Reports',
+      icon: <BarChart3 size={20} />,
+      description: 'Financial analytics & insights',
+      path: '/accounts/reports',
       subItems: [
-        { id: 'vendor-bills', label: 'Vendor Bills', icon: <FileText size={18} />, description: 'Manage vendor invoices' },
-        { id: 'vendor-payments', label: 'Vendor Payments', icon: <CreditCard size={18} />, description: 'Process vendor payments' },
-        { id: 'vendor-ledger', label: 'Vendor Ledger', icon: <Users size={18} />, description: 'View vendor account history' },
-        { id: 'pending-payments', label: 'Pending Payments', icon: <Clock size={18} />, description: 'Review awaiting payments', badge: 7 },
-        { id: 'ageing-payables', label: 'Ageing Report', icon: <BarChart3 size={18} />, description: 'Age-wise payables analysis' },
-        { id: 'approval-workflow', label: 'Approval Workflow', icon: <AlertCircle size={18} />, description: 'Manage payment approvals', badge: 4 }
+        { id: 'banking-analytics', label: 'Banking Analytics', icon: <BarChart3 size={18} />, description: 'Cash flow & trends analysis', path: '/accounts/banking-analytics' },
+        { id: 'balance-sheet', label: 'Balance Sheet', icon: <FileText size={18} />, description: 'Assets, liabilities & equity', path: '/accounts/balancesheet' },
       ]
     },
     {
-      id: 'reports',
-      label: 'Reports',
-      icon: <BarChart3 size={20} />,
-      description: 'Financial reports & analytics',
+      id: 'system',
+      label: 'System & Security',
+      icon: <Shield size={20} />,
+      description: 'Alerts, notifications & audit',
       subItems: [
-        { id: 'pl-report', label: 'Profit & Loss', icon: <TrendingUp size={18} />, description: 'Income & expense summary' },
-        { id: 'balance-sheet', label: 'Balance Sheet', icon: <FileText size={18} />, description: 'Assets, liabilities & equity' },
-        { id: 'cash-flow', label: 'Cash Flow', icon: <TrendingDown size={18} />, description: 'Cash in & out analysis' },
-        { id: 'trial-balance', label: 'Trial Balance', icon: <BarChart3 size={18} />, description: 'Debit & credit summary' }
+        { id: 'alerts-notifications', label: 'Alerts & Notifications', icon: <Bell size={18} />, description: 'Manage alerts & reminders', badge: 15 },
+        { id: 'audit-trail', label: 'Audit Trail', icon: <Shield size={18} />, description: 'Transaction history & logs' }
       ]
     },
     {
@@ -103,13 +115,8 @@ const AccountsSidebar: React.FC<AccountsSidebarProps> = ({ activeSection, active
       label: 'Settings',
       icon: <Settings size={20} />,
       description: 'Configure accounts module',
-      subItems: [
-        { id: 'income-categories', label: 'Income Categories', icon: <TrendingUp size={18} />, description: 'Manage income types' },
-        { id: 'expense-categories', label: 'Expense Categories', icon: <TrendingDown size={18} />, description: 'Manage expense types' },
-        { id: 'bank-config', label: 'Bank Configuration', icon: <Building2 size={18} />, description: 'Setup bank integrations' },
-        { id: 'reminder-templates', label: 'Reminder Templates', icon: <Clock size={18} />, description: 'Customize notification messages' },
-        { id: 'automation-rules', label: 'Automation Rules', icon: <Settings size={18} />, description: 'Setup automated workflows' }
-      ]
+      path: '/accounts/settings',
+      subItems: []
     }
   ];
 

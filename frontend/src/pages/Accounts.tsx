@@ -3,6 +3,22 @@ import { useLocation } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import BankAccounts from '../modules/accounts/BankAccounts';
+import BankReconciliation from '../modules/accounts/BankReconciliation';
+import RecurringTransactions from '../modules/accounts/RecurringTransactions';
+import ChequeManagement from '../modules/accounts/ChequeManagement';
+import TransactionApproval from '../modules/accounts/TransactionApproval';
+import CashManagement from '../modules/accounts/CashManagement';
+import BankStatementGenerator from '../modules/accounts/BankStatementGenerator';
+import BankingAnalytics from '../modules/accounts/BankingAnalytics';
+import AlertsNotifications from '../modules/accounts/AlertsNotifications';
+import BankFeeds from '../modules/accounts/BankFeeds';
+import SplitTransaction from '../modules/accounts/SplitTransaction';
+import MultiCurrency from '../modules/accounts/MultiCurrency';
+import AuditTrail from '../modules/accounts/AuditTrail';
+import Receivables from '../modules/accounts/Receivables';
+import Payables from '../modules/accounts/Payables';
+import AccountsReports from '../modules/accounts/AccountsReports';
+import AccountsSettings from '../modules/accounts/AccountsSettings';
 import Income from './Income';
 import Expenses from './Expenses';
 import BalanceSheet from './BalanceSheet';
@@ -29,71 +45,88 @@ const Accounts = () => {
       return <BankAccounts />;
     }
 
-    // Income Section
+    if (path === '/accounts/reconciliation') {
+      return <BankReconciliation />;
+    }
+
+    if (path === '/accounts/cheque-management') {
+      return <ChequeManagement />;
+    }
+
+    if (path === '/accounts/cash-management') {
+      return <CashManagement />;
+    }
+
+    if (path === '/accounts/bank-feeds') {
+      return <BankFeeds />;
+    }
+
+    if (path === '/accounts/bank-statements') {
+      return <BankStatementGenerator />;
+    }
+
+    // Transactions Section
+    if (path === '/accounts/recurring-transactions') {
+      return <RecurringTransactions />;
+    }
+
+    if (path === '/accounts/split-transactions') {
+      return <SplitTransaction />;
+    }
+
+    if (path === '/accounts/transaction-approval') {
+      return <TransactionApproval />;
+    }
+
+    if (path === '/accounts/multi-currency') {
+      return <MultiCurrency />;
+    }
+
+    // Income & Expense Section
     if (path === '/accounts/income') {
       return <Income />;
     }
 
-    // Expenses Section
     if (path === '/accounts/expenses') {
       return <Expenses />;
     }
 
-    // Balance Sheet Section
+    // Analytics & Reports
+    if (path === '/accounts/banking-analytics') {
+      return <BankingAnalytics />;
+    }
+
     if (path === '/accounts/balancesheet') {
       return <BalanceSheet />;
     }
 
+    // System & Security
+    if (path === '/accounts/alerts-notifications') {
+      return <AlertsNotifications />;
+    }
+
+    if (path === '/accounts/audit-trail') {
+      return <AuditTrail />;
+    }
+
     // Receivables Section
     if (path === '/accounts/receivables') {
-      return (
-        <div style={{ padding: '24px', background: '#F8FAFC', minHeight: '100%' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1E293B', marginBottom: '8px' }}>Receivables</h2>
-          <p style={{ color: '#64748B', marginBottom: '24px' }}>Manage customer payments and outstanding amounts</p>
-          <div style={{ background: 'white', padding: '40px', borderRadius: '12px', textAlign: 'center' }}>
-            <p style={{ color: '#94A3B8' }}>Coming soon...</p>
-          </div>
-        </div>
-      );
+      return <Receivables />;
     }
 
     // Payables Section
     if (path === '/accounts/payables') {
-      return (
-        <div style={{ padding: '24px', background: '#F8FAFC', minHeight: '100%' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1E293B', marginBottom: '8px' }}>Payables</h2>
-          <p style={{ color: '#64748B', marginBottom: '24px' }}>Manage vendor bills and payments</p>
-          <div style={{ background: 'white', padding: '40px', borderRadius: '12px', textAlign: 'center' }}>
-            <p style={{ color: '#94A3B8' }}>Coming soon...</p>
-          </div>
-        </div>
-      );
+      return <Payables />;
     }
 
     // Reports Section
     if (path === '/accounts/reports') {
-      return (
-        <div style={{ padding: '24px', background: '#F8FAFC', minHeight: '100%' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1E293B', marginBottom: '8px' }}>Reports</h2>
-          <p style={{ color: '#64748B', marginBottom: '24px' }}>Financial reports and analytics</p>
-          <div style={{ background: 'white', padding: '40px', borderRadius: '12px', textAlign: 'center' }}>
-            <p style={{ color: '#94A3B8' }}>Coming soon...</p>
-          </div>
-        </div>
-      );
+      return <AccountsReports />;
     }
 
     // Settings Section
     if (path === '/accounts/settings') {
-      return (
-        <div style={{ padding: '24px', background: '#F8FAFC', minHeight: '100%' }}>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#1E293B', marginBottom: '8px' }}>Settings</h2>
-          <p style={{ color: '#64748B', marginBottom: '24px' }}>Configure accounts module</p>
-          <div style={{ background: 'white', padding: '40px', borderRadius: '12px', textAlign: 'center' }}>
-            <p style={{ color: '#94A3B8' }}>Coming soon...</p>
-          </div>
-        </div>
-      );
+      return <AccountsSettings />;
     }
 
     // Default to Banking

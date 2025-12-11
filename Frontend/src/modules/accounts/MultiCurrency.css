@@ -1,0 +1,760 @@
+/* Multi-Currency Styles */
+
+.multi-currency-container {
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+}
+
+/* Header */
+.currency-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.currency-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.currency-icon-main {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.currency-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.currency-header p {
+  margin: 0.25rem 0 0 0;
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.currency-header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-refresh,
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-refresh {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.btn-refresh:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+/* Summary Cards */
+.currency-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  transition: all 0.3s ease;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+.summary-icon {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.summary-icon.gain {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.summary-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary-value {
+  font-size: 1.25rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.summary-value.gain {
+  color: #10b981;
+}
+
+.summary-value.loss {
+  color: #ef4444;
+}
+
+/* View Selector */
+.view-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.view-selector button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 2px solid transparent;
+  background: transparent;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-selector button:hover {
+  background: #f8f9fa;
+  color: #667eea;
+}
+
+.view-selector button.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Forex Accounts */
+.forex-accounts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.forex-account-card {
+  background: white;
+  padding: 1.75rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.forex-account-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+.account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #f1f3f5;
+}
+
+.account-currency {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.currency-flag {
+  font-size: 2rem;
+}
+
+.account-currency strong {
+  display: block;
+  font-size: 1.1rem;
+  color: #2d3748;
+  margin-bottom: 0.25rem;
+}
+
+.account-number {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.status-badge {
+  padding: 0.375rem 0.875rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.status-badge.active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.account-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-item span {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.detail-item strong {
+  color: #2d3748;
+}
+
+.account-balances {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #f1f3f5;
+}
+
+.balance-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.balance-item span {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.balance-item strong {
+  font-size: 1.25rem;
+  color: #667eea;
+}
+
+.balance-item.base strong {
+  color: #2d3748;
+}
+
+/* Exchange Rates */
+.exchange-rates {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.rates-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.rates-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.rates-table th {
+  padding: 1.25rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.rates-table td {
+  padding: 1.25rem;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.rates-table tbody tr:hover {
+  background: #f8f9ff;
+}
+
+.currency-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pair-currencies {
+  font-size: 1.25rem;
+}
+
+.currency-pair strong {
+  color: #2d3748;
+  font-size: 0.95rem;
+}
+
+.current-rate {
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.change-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.change-badge.positive {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.change-badge.negative {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Currency Converter */
+.currency-converter {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.converter-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 700px;
+}
+
+.converter-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 2rem 0;
+  font-size: 1.5rem;
+  color: #2d3748;
+}
+
+.converter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.converter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.converter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.converter-field label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.converter-field select,
+.converter-field input {
+  padding: 0.875rem;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.converter-field select:focus,
+.converter-field input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.converted-amount {
+  padding: 0.875rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+  text-align: center;
+}
+
+.converter-swap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-swap {
+  width: 48px;
+  height: 48px;
+  border: 2px solid #e9ecef;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #667eea;
+}
+
+.btn-swap:hover {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+  transform: rotate(180deg);
+}
+
+.exchange-rate-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.exchange-rate-info span {
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.exchange-rate-info strong {
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+/* Forex Transactions */
+.forex-transactions {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions-table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.transactions-table th {
+  padding: 1.25rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.transactions-table td {
+  padding: 1.25rem;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+.transactions-table tbody tr:hover {
+  background: #f8f9ff;
+}
+
+.txn-amount {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.txn-amount span {
+  font-size: 1.25rem;
+}
+
+.gain-loss-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.gain-loss-badge.gain {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.gain-loss-badge.loss {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 2px solid #f1f3f5;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2d3748;
+}
+
+.btn-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6c757d;
+  transition: all 0.2s ease;
+}
+
+.btn-close:hover {
+  background: #e9ecef;
+  color: #2d3748;
+}
+
+.modal-body {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.875rem;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  border-top: 2px solid #f1f3f5;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 1rem;
+  border: 2px solid #e9ecef;
+  background: white;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #495057;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .currency-summary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .multi-currency-container {
+    padding: 1rem;
+  }
+
+  .currency-header {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .currency-header-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .currency-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .view-selector {
+    flex-direction: column;
+  }
+
+  .forex-accounts {
+    grid-template-columns: 1fr;
+  }
+
+  .converter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .rates-table,
+  .transactions-table {
+    font-size: 0.85rem;
+  }
+
+  .rates-table th,
+  .rates-table td,
+  .transactions-table th,
+  .transactions-table td {
+    padding: 0.75rem;
+  }
+}

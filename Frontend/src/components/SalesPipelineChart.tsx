@@ -11,11 +11,11 @@ import {
 } from 'recharts';
 
 const data = [
-  { stage: 'Leads', count: 136, color: '#ff00ff' },      // Magenta
-  { stage: 'Qualified', count: 84, color: '#00d4ff' },   // Electric Cyan
-  { stage: 'Proposals', count: 52, color: '#ffd700' },   // Gold
-  { stage: 'Negotiation', count: 28, color: '#ff2d95' }, // Hot Pink
-  { stage: 'Closed Won', count: 15, color: '#00ff9f' }   // Neon Green
+  { stage: 'Leads', count: 136, color: '#6366f1' },      // Indigo
+  { stage: 'Qualified', count: 84, color: '#8b5cf6' },   // Purple
+  { stage: 'Proposals', count: 52, color: '#10b981' },   // Teal
+  { stage: 'Negotiation', count: 28, color: '#14b8a6' }, // Cyan-Teal
+  { stage: 'Closed Won', count: 15, color: '#22c55e' }   // Green
 ];
 
 const CustomTooltip = ({ active, payload }: any) => {

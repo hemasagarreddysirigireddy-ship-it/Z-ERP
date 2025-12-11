@@ -51,15 +51,15 @@ const RevenueChart: React.FC = () => {
         </div>
         <div className="chart-legend-custom">
           <div className="legend-item">
-            <span className="legend-dot" style={{ background: '#00d4ff' }}></span>
+            <span className="legend-dot" style={{ background: '#6366f1' }}></span>
             <span>Revenue</span>
           </div>
           <div className="legend-item">
-            <span className="legend-dot" style={{ background: '#ff2d95' }}></span>
+            <span className="legend-dot" style={{ background: '#ec4899' }}></span>
             <span>Expenses</span>
           </div>
           <div className="legend-item">
-            <span className="legend-dot" style={{ background: '#00ff9f' }}></span>
+            <span className="legend-dot" style={{ background: '#10b981' }}></span>
             <span>Profit</span>
           </div>
         </div>
@@ -68,16 +68,16 @@ const RevenueChart: React.FC = () => {
         <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#00d4ff" stopOpacity={0.5}/>
-              <stop offset="95%" stopColor="#00d4ff" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#6366f1" stopOpacity={0.5}/>
+              <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
             </linearGradient>
             <linearGradient id="colorExpenses" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#ff2d95" stopOpacity={0.5}/>
-              <stop offset="95%" stopColor="#ff2d95" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#ec4899" stopOpacity={0.5}/>
+              <stop offset="95%" stopColor="#ec4899" stopOpacity={0}/>
             </linearGradient>
             <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#00ff9f" stopOpacity={0.5}/>
-              <stop offset="95%" stopColor="#00ff9f" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#10b981" stopOpacity={0.5}/>
+              <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
@@ -95,7 +95,7 @@ const RevenueChart: React.FC = () => {
           <Area 
             type="monotone" 
             dataKey="revenue" 
-            stroke="#00d4ff" 
+            stroke="#6366f1" 
             strokeWidth={3}
             fillOpacity={1} 
             fill="url(#colorRevenue)"
@@ -104,7 +104,7 @@ const RevenueChart: React.FC = () => {
           <Area 
             type="monotone" 
             dataKey="expenses" 
-            stroke="#ff2d95" 
+            stroke="#ec4899" 
             strokeWidth={3}
             fillOpacity={1} 
             fill="url(#colorExpenses)"
@@ -113,7 +113,7 @@ const RevenueChart: React.FC = () => {
           <Area 
             type="monotone" 
             dataKey="profit" 
-            stroke="#00ff9f" 
+            stroke="#10b981" 
             strokeWidth={3}
             fillOpacity={1} 
             fill="url(#colorProfit)"

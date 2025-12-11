@@ -1,0 +1,542 @@
+.bank-reconciliation {
+  padding: 24px;
+  background: #F8FAFC;
+  min-height: 100vh;
+}
+
+/* Header */
+.reconciliation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header-icon {
+  color: #10B981;
+}
+
+.reconciliation-header h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0 0 4px 0;
+}
+
+.reconciliation-header p {
+  color: #64748B;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Account Selector & Summary */
+.reconciliation-summary {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.account-selector {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.account-selector label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748B;
+  margin-bottom: 8px;
+}
+
+.account-selector select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #1E293B;
+  background: white;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.summary-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.summary-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.summary-icon.success {
+  background: #D1FAE5;
+  color: #10B981;
+}
+
+.summary-icon.danger {
+  background: #FEE2E2;
+  color: #EF4444;
+}
+
+.summary-content {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.summary-label {
+  font-size: 0.875rem;
+  color: #64748B;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1E293B;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.summary-value.positive {
+  color: #10B981;
+}
+
+.summary-value.negative {
+  color: #EF4444;
+}
+
+/* Status Overview */
+.status-overview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.status-card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-left: 4px solid;
+  min-width: 0;
+  text-align: center;
+}
+
+.status-card.matched {
+  border-color: #10B981;
+  color: #10B981;
+}
+
+.status-card.unmatched {
+  border-color: #F59E0B;
+  color: #F59E0B;
+}
+
+.status-card.disputed {
+  border-color: #EF4444;
+  color: #EF4444;
+}
+
+.status-card.pending {
+  border-color: #6366F1;
+  color: #6366F1;
+}
+
+.status-count {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+}
+
+.status-label {
+  font-size: 0.875rem;
+  color: #64748B;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Reconciliation Modes */
+.reconciliation-modes {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.mode-btn {
+  padding: 12px 24px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  background: white;
+  color: #64748B;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.mode-btn.active {
+  background: #6366F1;
+  color: white;
+  border-color: #6366F1;
+}
+
+/* Filters */
+.reconciliation-filters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  align-items: center;
+}
+
+.search-box {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+
+.search-box svg {
+  color: #94A3B8;
+  margin-right: 12px;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #1E293B;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-btn {
+  padding: 10px 16px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  background: white;
+  color: #64748B;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+.filter-btn.active {
+  background: #EEF2FF;
+  color: #6366F1;
+  border-color: #6366F1;
+}
+
+/* Reconciliation Items */
+.reconciliation-items {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.reconciliation-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border-bottom: 1px solid #F1F5F9;
+  transition: background 0.2s;
+}
+
+.reconciliation-item:hover {
+  background: #F8FAFC;
+}
+
+.reconciliation-item:last-child {
+  border-bottom: none;
+}
+
+.item-status-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.reconciliation-item.matched .item-status-indicator {
+  background: #D1FAE5;
+  color: #10B981;
+}
+
+.reconciliation-item.unmatched .item-status-indicator {
+  background: #FEF3C7;
+  color: #F59E0B;
+}
+
+.reconciliation-item.disputed .item-status-indicator {
+  background: #FEE2E2;
+  color: #EF4444;
+}
+
+.reconciliation-item.pending .item-status-indicator {
+  background: #E0E7FF;
+  color: #6366F1;
+}
+
+.item-content {
+  flex: 1;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.item-description {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.item-description h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0;
+}
+
+.item-type {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.item-type.credit {
+  background: #D1FAE5;
+  color: #10B981;
+}
+
+.item-type.debit {
+  background: #FEE2E2;
+  color: #EF4444;
+}
+
+.item-amount {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.item-amount.credit {
+  color: #10B981;
+}
+
+.item-amount.debit {
+  color: #EF4444;
+}
+
+.item-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.detail-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: #64748B;
+}
+
+.detail-row svg {
+  color: #94A3B8;
+}
+
+.detail-row.difference {
+  color: #EF4444;
+  font-weight: 600;
+}
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn.view {
+  background: #F8FAFC;
+  color: #64748B;
+}
+
+.action-btn.match {
+  background: #10B981;
+  color: white;
+}
+
+.action-btn.edit {
+  background: #F59E0B;
+  color: white;
+}
+
+.action-btn.approve {
+  background: #6366F1;
+  color: white;
+}
+
+.action-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Upload Modal */
+.upload-area {
+  text-align: center;
+  padding: 60px 40px;
+  border: 2px dashed #CBD5E1;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.upload-area svg {
+  color: #94A3B8;
+  margin-bottom: 16px;
+}
+
+.upload-area h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0 0 8px 0;
+}
+
+.upload-area p {
+  color: #64748B;
+  margin: 0 0 24px 0;
+}
+
+.upload-instructions {
+  background: #F8FAFC;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.upload-instructions h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0 0 12px 0;
+}
+
+.upload-instructions ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #64748B;
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 40px;
+}
+
+.empty-state svg {
+  color: #CBD5E1;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1E293B;
+  margin: 0 0 8px 0;
+}
+
+.empty-state p {
+  color: #94A3B8;
+  margin: 0;
+}
