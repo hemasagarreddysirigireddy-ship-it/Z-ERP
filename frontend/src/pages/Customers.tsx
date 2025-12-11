@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { Users, TrendingUp, Phone, Mail, MessageSquare, Calendar, DollarSign, Plus, Filter, Search } from 'lucide-react';
 import '../styles/Dashboard.css';
+import '../styles/Customers.css';
 
 const Customers = () => {
   const [sidebarOpen, setSidebarOpen] = useState(() => {

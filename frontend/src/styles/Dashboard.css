@@ -22,6 +22,35 @@
    - Supports dark mode
    ============================================ */
 
+/* CRITICAL: Force all modals and dropdowns to display outside containers */
+html, body, #root {
+  overflow: visible !important;
+}
+
+.header,
+.dashboard-layout,
+.dashboard-container,
+.main-content,
+.header-right,
+.header-left,
+.header-actions,
+.dropdown {
+  overflow: visible !important;
+  position: static !important;
+}
+
+/* Force all modal overlays and dropdowns to use fixed positioning */
+.modal-overlay,
+.share-modal-overlay,
+.dropdown-menu,
+.messages-dropdown-modern,
+.notifications-dropdown-modern,
+.profile-dropdown-modern,
+.language-submenu-modern {
+  position: fixed !important;
+  z-index: 999999 !important;
+}
+
 /* Global Styles */
 * {
   margin: 0;
@@ -255,7 +284,7 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: auto;
   margin: 0;
   padding: 0;
 }
@@ -265,7 +294,7 @@ body {
   display: flex;
   min-height: 100vh;
   background-color: var(--bg-primary);
-  overflow-x: hidden;
+  overflow: visible;
   position: relative;
   width: 100%;
 }
@@ -274,7 +303,7 @@ body {
   display: flex;
   min-height: 100vh;
   background-color: var(--bg-primary);
-  overflow-x: hidden;
+  overflow: visible;
   position: relative;
   width: 100%;
 }
@@ -287,7 +316,7 @@ body {
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   min-width: 0;
-  overflow-x: hidden;
+  overflow: visible;
 }
 
 .main-content.sidebar-open {
@@ -766,6 +795,7 @@ body {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   min-height: 72px;
+  overflow: visible;
 }
 
 [data-theme="dark"] .header {
@@ -966,6 +996,8 @@ body {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
+  overflow: visible;
+  position: static;
 }
 
 .icon-btn {
@@ -3096,21 +3128,23 @@ body {
 
 /* ===== HEADER DROPDOWNS ===== */
 .dropdown {
-  position: relative;
+  position: static;
+  overflow: visible;
 }
 
 .dropdown-menu {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
+  position: fixed !important;
+  top: 80px !important;
+  right: 20px !important;
+  left: auto !important;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-lg);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 100px rgba(99, 102, 241, 0.2);
   min-width: 360px;
   max-height: 500px;
-  overflow: hidden;
-  z-index: 9999;
+  overflow: auto;
+  z-index: 999999 !important;
   animation: dropdownSlideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -3851,6 +3885,7 @@ body {
   gap: var(--spacing-md);
   position: relative;
   z-index: 10;
+  overflow: visible;
 }
 
 .header-actions button {
@@ -3862,7 +3897,7 @@ body {
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -7508,22 +7543,22 @@ body {
 
 /* Task Modal Styles */
 .modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
   background: linear-gradient(135deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.75) 100%);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  z-index: 999999;
+  z-index: 999999 !important;
   padding-top: 5rem;
   padding-bottom: 2rem;
-  padding-left: calc(260px + 2rem);
-  padding-right: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   overflow-y: auto;
   animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -12014,6 +12049,7 @@ body {
 /* Modern Dropdowns */
 .messages-dropdown-modern,
 .notifications-dropdown-modern {
+  position: fixed !important;
   width: 440px;
   max-height: 580px;
   border-radius: 18px;
@@ -12021,9 +12057,13 @@ body {
               0 0 0 1px rgba(0, 217, 126, 0.1),
               inset 0 1px 0 0 rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(0, 217, 126, 0.15);
-  overflow: hidden;
+  overflow: auto;
   background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
   animation: dropdownSlideIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  right: 20px !important;
+  top: 80px !important;
+  left: auto !important;
+  z-index: 999999 !important;
 }
 
 @keyframes dropdownSlideIn {
@@ -12933,14 +12973,17 @@ body {
 }
 
 .profile-dropdown-modern {
+  position: fixed !important;
   width: 280px;
   border-radius: 16px;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   border: 1px solid #e5e7eb;
-  overflow: hidden;
+  overflow: visible;
   animation: dropdownSlideIn 0.3s ease;
-  right: 0;
-  margin-right: 1rem;
+  right: 20px !important;
+  top: 80px !important;
+  left: auto !important;
+  z-index: 999999 !important;
 }
 
 @keyframes dropdownSlideIn {
@@ -13304,11 +13347,11 @@ body {
 
 /* Modern Language Menu Styles */
 .language-submenu-modern {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: 0.375rem;
+  position: fixed !important;
+  top: 200px !important;
+  left: auto !important;
+  right: 320px !important;
+  bottom: auto !important;
   background: white;
   border: 2px solid #e5e7eb;
   border-radius: 10px;
@@ -13316,9 +13359,10 @@ body {
               0 10px 30px rgba(0, 0, 0, 0.2),
               0 0 0 1px rgba(0, 212, 255, 0.15);
   animation: languageMenuSlideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 999998;
-  overflow: hidden;
-  min-width: 100%;
+  z-index: 9999999 !important;
+  overflow: auto;
+  max-height: 400px;
+  width: 280px;
 }
 
 @keyframes languageMenuSlideDown {
@@ -13683,18 +13727,18 @@ body {
 
 /* Overlay */
 .share-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  z-index: 999999;
+  z-index: 999999 !important;
   padding-top: 5rem;
   padding-bottom: 2rem;
   padding-left: 1rem;

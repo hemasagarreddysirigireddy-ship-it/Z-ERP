@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { FileText, Clock, AlertTriangle, CheckCircle, Calendar, DollarSign, Users, Plus, Filter, Download } from 'lucide-react';
 import '../styles/Dashboard.css';
+import '../styles/Contracts.css';
 
 const Contracts = () => {
   const [sidebarOpen, setSidebarOpen] = useState(() => {

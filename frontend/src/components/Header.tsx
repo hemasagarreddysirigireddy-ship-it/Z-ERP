@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { Search, Share2, Clock, Bell, Plus, Menu, MessageSquare, User, Settings, LogOut, ChevronDown, X, Tag, Calendar, MapPin, Zap, TrendingUp, Award, Coffee, Target, Activity, Brain, Timer, Mail, Phone, CheckCircle, AlertCircle, Info, Star, Send, RotateCcw, Copy, Link2, Users, Building2, Globe2 } from 'lucide-react';
 import EditProfile from '../Pages/EditProfile';
@@ -441,6 +442,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
   }, [showSearchResults, searchQuery, getSearchResults, handleSearchNavigation]);
 
   return (
+    <>
     <header className="header">
       <div className="header-left">
         <button className="menu-toggle" onClick={onMenuClick}>
@@ -1206,7 +1208,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
       </div>
 
       {/* Profile Page Modal */}
-      {showProfilePage && (
+      {showProfilePage && ReactDOM.createPortal(
         <div className="modal-overlay" onClick={() => setShowProfilePage(false)}>
           <div className="modal-container profile-page-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -1654,11 +1656,12 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Add Task Modal */}
-      {showTaskModal && (
+      {showTaskModal && ReactDOM.createPortal(
         <div className="modal-overlay" onClick={() => setShowTaskModal(false)}>
           <div className="modal-container task-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -1879,11 +1882,12 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Full Notifications Panel */}
-      {showFullNotifications && (
+      {showFullNotifications && ReactDOM.createPortal(
         <div className="modal-overlay" onClick={() => setShowFullNotifications(false)}>
           <div className="modal-container full-notifications-panel" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -1955,11 +1959,12 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               ))}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Full Messages Panel */}
-      {showFullMessages && (
+      {showFullMessages && ReactDOM.createPortal(
         <div className="modal-overlay" onClick={() => setShowFullMessages(false)}>
           <div className="modal-container full-messages-panel" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -2022,16 +2027,18 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               ))}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Edit Profile Modal */}
-      {showEditProfile && (
-        <EditProfile onClose={() => setShowEditProfile(false)} />
+      {showEditProfile && ReactDOM.createPortal(
+        <EditProfile onClose={() => setShowEditProfile(false)} />,
+        document.body
       )}
 
       {/* Share Modal */}
-      {showShareModal && (
+      {showShareModal && ReactDOM.createPortal(
         <div className="share-modal-overlay" onClick={() => setShowShareModal(false)}>
           <div className="share-modal-container" onClick={(e) => e.stopPropagation()}>
             {/* Header */}
@@ -2230,9 +2237,11 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
+    </>
   );
 };
 

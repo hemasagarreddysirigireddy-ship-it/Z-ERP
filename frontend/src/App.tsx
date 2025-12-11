@@ -6,18 +6,18 @@ import Loading from './components/Loading';
 import './styles/Dashboard.css';
 
 // Lazy load components
-const Login = lazy(() => import('./pages/login'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Projects = lazy(() => import('./pages/Projects'));
-const HRM = lazy(() => import('./pages/HRM'));
-const Sales = lazy(() => import('./pages/Sales'));
-const Accounts = lazy(() => import('./pages/Accounts'));
-const Recruitment = lazy(() => import('./pages/Recruitment'));
-const Customers = lazy(() => import('./pages/Customers'));
-const Contracts = lazy(() => import('./pages/Contracts'));
-const Vendors = lazy(() => import('./pages/Vendors'));
-const ProductsServices = lazy(() => import('./pages/ProductsServices'));
-const Admin = lazy(() => import('./pages/Admin'));
+const Login = lazy(() => import('./Pages/login'));
+const Dashboard = lazy(() => import('./Pages/Dashboard'));
+const Projects = lazy(() => import('./Pages/Projects'));
+const HRM = lazy(() => import('./Pages/HRM'));
+const Sales = lazy(() => import('./Pages/Sales'));
+const Accounts = lazy(() => import('./Pages/Accounts'));
+const Recruitment = lazy(() => import('./Pages/Recruitment'));
+const Customers = lazy(() => import('./Pages/Customers'));
+const Contracts = lazy(() => import('./Pages/Contracts'));
+const Vendors = lazy(() => import('./Pages/Vendors'));
+const ProductsServices = lazy(() => import('./Pages/ProductsServices'));
+const Admin = lazy(() => import('./Pages/Admin'));
 
 // Sales Module Components
 const ProposalsList = lazy(() => import('./Pages/Sales/ProposalsList'));
