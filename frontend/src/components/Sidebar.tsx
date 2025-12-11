@@ -143,11 +143,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       label: 'Staff Recruitment', 
       path: '/recruitment', 
       badge: null, 
-      submenu: [
-        { icon: FileText, label: 'Job Descriptions', path: '/recruitment/jobs' },
-        { icon: Calendar, label: 'Interview Schedule', path: '/recruitment/interviews' },
-        { icon: Users, label: 'AI Profile Matching', path: '/recruitment/ai-matching' }
-      ]
+      submenu: null
     },
     { 
       icon: Users, 
@@ -164,12 +160,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onToggle }) => {
       icon: FileSignature, 
       label: 'Contracts', 
       path: '/contracts', 
-      badge: null, 
-      submenu: [
-        { icon: FileText, label: 'Active Contracts', path: '/contracts/active' },
-        { icon: Calendar, label: 'Renewals', path: '/contracts/renewals' },
-        { icon: Clock, label: 'Expiry Alerts', path: '/contracts/alerts' }
-      ]
+      badge: null
     },
     { 
       icon: Briefcase, 
